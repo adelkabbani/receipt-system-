@@ -50,7 +50,7 @@ const MyDocument = ({ data }: { data: any }) => (
                     {COMPANY_CONFIG.logoPath && (
                         <Image
                             src={window.location.origin + COMPANY_CONFIG.logoPath}
-                            style={{ width: 80, marginBottom: 10 }}
+                            style={{ width: 100, marginBottom: 10 }}
                         />
                     )}
                     {/* Company Details */}
@@ -65,18 +65,18 @@ const MyDocument = ({ data }: { data: any }) => (
                     </Text>
                 </View>
 
-                {/* Right Side: Moller Logo + Offer Details */}
+                {/* Right Side: Branch Logo + Offer Details */}
                 <View style={{ flexDirection: 'column', alignItems: 'flex-end', width: '40%' }}>
-                    {/* Moller Logo */}
+                    {/* Branch Logo */}
                     <Image
                         src={window.location.origin + (data.branch === 'gpc' ? "/gpc_logo.png" : "/moller_logo.png")}
-                        style={{ width: 120, marginBottom: 10 }}
+                        style={{ width: 100, marginBottom: 10 }}
                     />
                     {/* Offer Details */}
                     <View style={{ alignItems: 'flex-end' }}>
                         <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 4 }}>OFFER</Text>
                         <Text style={styles.meta}>#{data.offerNumber || 'DRAFT'}</Text>
-                        <Text style={styles.meta}>Date: {data.date ? new Date(data.date).toLocaleDateString() : new Date().toLocaleDateString()}</Text>
+                        <Text style={styles.meta}>Date: {data.date ? new Date(data.date).toLocaleDateString('en-GB') : new Date().toLocaleDateString('en-GB')}</Text>
                     </View>
                 </View>
             </View>
@@ -85,7 +85,6 @@ const MyDocument = ({ data }: { data: any }) => (
             <View style={{ marginBottom: 20 }}>
                 <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 5 }}>Bill To:</Text>
                 <Text style={{ fontSize: 12, marginBottom: 5 }}>{data.billingName || 'Client Name'}</Text>
-
                 <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 5 }}>Location:</Text>
                 <Text style={{ fontSize: 12, marginBottom: 5 }}>{data.clientLocation || 'Location'}</Text>
                 <Text style={{ fontSize: 12, fontWeight: 'bold', marginBottom: 5 }}>Company Number:</Text>
@@ -118,9 +117,6 @@ const MyDocument = ({ data }: { data: any }) => (
                     <Text style={[styles.colPrice, styles.text]}>€{Number(item.packagePrice || item.pricePerLiter || 0).toFixed(2)}</Text>
                     <Text style={[styles.colTotal, styles.text]}>
                         {(() => {
-                            // Use packagePrice as the single source of truth.
-                            // For L products: packagePrice = pricePerLiter × amount (set during product creation/restore)
-                            // For kg/g products: packagePrice = total drum price
                             const pkgPrice = Number(item.packagePrice) || (Number(item.amount || 0) * Number(item.pricePerLiter || 0));
                             const total = Number(item.quantity) * pkgPrice;
                             return `€${total.toFixed(2)}`;
@@ -149,14 +145,14 @@ const MyDocument = ({ data }: { data: any }) => (
                 </View>
             </View>
 
-            <View style={[styles.footer, { justifyContent: 'flex-end' }]}>
+            {/* Footer */}
+            <View style={[styles.footer, { justifyContent: 'flex-end' }]} fixed>
                 <View style={{ alignItems: 'flex-end' }}>
                     <Text style={{ fontSize: 10, color: '#999' }}>{COMPANY_CONFIG.contact.web}</Text>
                     <Text style={{ fontSize: 10, color: '#999', marginBottom: 5 }}>{COMPANY_CONFIG.contact.email}</Text>
                     <Text
                         style={{ fontSize: 9, color: '#333', fontWeight: 'bold' }}
                         render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
-                        fixed
                     />
                 </View>
             </View>
@@ -175,7 +171,7 @@ export default function PDFPreview({ data }: { data: any }) {
     if (!isClient) return <div className="flex items-center justify-center h-full text-muted-foreground">Loading PDF Engine...</div>;
 
     return (
-        <div className="h-[600px] w-full bg-white rounded-md border shadow-sm">
+        <div className="h-full w-full min-h-0 bg-white rounded-md border shadow-sm">
             <PDFViewer width="100%" height="100%" showToolbar={true}>
                 <MyDocument data={data} />
             </PDFViewer>

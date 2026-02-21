@@ -70,3 +70,37 @@ export async function deleteProduct(id: number) {
     revalidatePath("/inventory");
     revalidatePath("/offers/new");
 }
+
+export async function saveInvoice(data: any) {
+    // 1. Find the last invoice to get the highest numeric part
+    // We use offerCount as the reliable numeric sequence
+    const lastInvoice = await prisma.invoice.findFirst({
+        orderBy: { offerCount: 'desc' },
+    });
+
+    const nextCount = lastInvoice ? lastInvoice.offerCount + 1 : 1;
+    const formattedOfferNumber = `OFF-${nextCount.toString().padStart(4, '0')}`;
+
+    // 2. Create the record
+    await prisma.invoice.create({
+        data: {
+            offerNumber: formattedOfferNumber,
+            offerCount: nextCount,
+            clientName: data.billingName || "Unknown Client",
+            date: data.date ? new Date(data.date) : new Date(),
+            totalNet: data.totalNet || 0,
+            vat: data.vat || 0,
+            lineItems: {
+                create: (data.lineItems || []).map((item: any) => ({
+                    quantity: Number(item.quantity) || 0,
+                    unit: item.measureUnit || "L",
+                    productId: Number(item.productId) || 0,
+                }))
+            }
+        },
+    });
+
+    revalidatePath("/offers");
+    const nextOfferNumber = `OFF-${(nextCount + 1).toString().padStart(4, '0')}`;
+    return { success: true, nextOfferNumber };
+}

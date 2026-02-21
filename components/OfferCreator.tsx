@@ -20,6 +20,7 @@ import {
     CommandItem,
     CommandList,
 } from "@/components/ui/command"
+import { saveInvoice } from "@/app/inventory/actions";
 
 // Dynamic import to avoid SSR issues with react-pdf binding
 const PDFPreview = dynamic(() => import("./PDFPreview"), {
@@ -29,7 +30,7 @@ const PDFPreview = dynamic(() => import("./PDFPreview"), {
 
 export function OfferCreator({ products }: { products: any[] }) {
     const [formData, setFormData] = useState({
-        offerNumber: "OFF-" + Math.floor(Math.random() * 10000),
+        offerNumber: "OFF-0001",
         billingName: "",    // New 'Bill To' name
         clientLocation: "",
         clientNumber: "",
@@ -150,6 +151,27 @@ export function OfferCreator({ products }: { products: any[] }) {
                 lineItems: newItems
             };
         });
+    };
+
+    const handleSave = async () => {
+        try {
+            const result = await saveInvoice({ ...formData, ...totals });
+            if (result.success) {
+                alert(`Receipt Saved Successfully! \nNext ID: ${result.nextOfferNumber}`);
+                // Auto-increment the UI for the next receipt
+                setFormData(prev => ({
+                    ...prev,
+                    offerNumber: result.nextOfferNumber,
+                    lineItems: [], // Clear items for next use
+                    billingName: "",
+                    clientLocation: "",
+                    clientNumber: ""
+                }));
+            }
+        } catch (error) {
+            console.error("Save failed", error);
+            alert("Failed to save receipt. Check console for details.");
+        }
     };
 
     return (
@@ -296,31 +318,32 @@ export function OfferCreator({ products }: { products: any[] }) {
                 </div>
 
                 {/* Products Card */}
-                <div className="space-y-4 rounded-xl p-6 gold-glass shadow-sm border-gold-500/20 flex-1">
-                    <div className="flex items-center justify-between">
+                <div className="space-y-4 rounded-xl p-6 gold-glass shadow-sm border-gold-500/20 flex flex-col max-h-[600px]">
+                    <div className="flex items-center justify-between mb-2">
                         <h3 className="font-bold text-lg bg-gradient-to-r from-gold-600 to-gold-400 bg-clip-text text-transparent">Products</h3>
                     </div>
 
-                    <div className="space-y-4">
+                    {/* Scrollable items list */}
+                    <div className="space-y-4 overflow-y-auto pr-2 flex-1 custom-scrollbar">
                         {formData.lineItems.map((item, index) => (
-                            <div key={index} className="flex flex-col gap-3 p-4 border rounded-xl bg-white/5 dark:bg-black/20 hover:bg-gold-500/5 transition-colors border-gold-500/10">
+                            <div key={index} className="flex flex-col gap-3 p-4 border rounded-xl bg-white/10 dark:bg-black/40 hover:bg-gold-500/10 transition-colors border-gold-500/20 shadow-md">
                                 <div className="flex gap-2">
                                     <div className="flex-1 space-y-1">
-                                        <Label className="text-xs text-muted-foreground">Product Name</Label>
+                                        <Label className="text-xs font-semibold text-gold-500/70">Product Name</Label>
                                         <Popover open={openPopovers[index]} onOpenChange={(open) => setOpenPopovers(prev => ({ ...prev, [index]: open }))}>
                                             <PopoverTrigger asChild>
                                                 <Button
                                                     variant="outline"
                                                     role="combobox"
                                                     className={cn(
-                                                        "w-full justify-between bg-transparent border-input/60",
-                                                        !item.productName && "text-muted-foreground"
+                                                        "w-full justify-between bg-black/20 dark:bg-black/40 border-gold-500/30 hover:border-gold-500 hover:bg-gold-500/10 text-white transition-all",
+                                                        !item.productName && "text-white/50"
                                                     )}
                                                 >
-                                                    {item.productName
-                                                        ? item.productName
-                                                        : "Select product..."}
-                                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    <span className="truncate">
+                                                        {item.productName ? item.productName : "Select product..."}
+                                                    </span>
+                                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50 text-gold-500" />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-[300px] p-0">
@@ -366,13 +389,13 @@ export function OfferCreator({ products }: { products: any[] }) {
                                         </Popover>
                                     </div>
                                     <div className="flex-1 space-y-1">
-                                        <Label className="text-xs text-muted-foreground">Variant (Size)</Label>
+                                        <Label className="text-xs font-semibold text-gold-500/70">Variant (Size)</Label>
                                         <Select
                                             value={item.productId}
                                             disabled={!item.productName}
                                             onValueChange={(val) => updateLineItem(index, "productId", val)}
                                         >
-                                            <SelectTrigger className="bg-transparent border-input/60">
+                                            <SelectTrigger className="bg-black/20 dark:bg-black/40 border-gold-500/30 hover:border-gold-500 text-white transition-all">
                                                 <SelectValue placeholder={item.productName ? "Select Size..." : "Choose Name First"} />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -439,10 +462,14 @@ export function OfferCreator({ products }: { products: any[] }) {
                                 )}
                             </div>
                         ))}
-                    </div>
+                    </div>{/* end scrollable list */}
 
-                    <div className="flex justify-center mt-6">
-                        <Button onClick={addLineItem} variant="outline" className="w-full max-w-sm gap-2 border-dashed border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/5 transition-all text-gold-600 dark:text-gold-400">
+                    {/* Add button pinned at bottom of card */}
+                    <div className="flex justify-center pt-3 mt-2 border-t border-gold-500/10">
+                        <Button
+                            onClick={addLineItem}
+                            className="w-full max-w-sm gap-2 bg-gold-500 hover:bg-gold-600 text-black shadow-[0_0_15px_rgba(239,189,51,0.4)] border-none font-bold transition-all"
+                        >
                             <Plus className="h-4 w-4" />
                             {formData.lineItems.length === 0 ? "Add Item" : "Add Another Item"}
                         </Button>
@@ -476,15 +503,22 @@ export function OfferCreator({ products }: { products: any[] }) {
                         <span>Total:</span>
                         <span className="text-gold-500 font-mono">€{totals.gross.toFixed(2)}</span>
                     </div>
+
+                    <Button
+                        onClick={handleSave}
+                        className="w-full mt-6 bg-gradient-to-r from-gold-600 to-gold-400 text-black font-bold hover:opacity-90 shadow-[0_0_20px_rgba(212,175,55,0.3)] border-none"
+                    >
+                        Save & Generate Next Receipt
+                    </Button>
                 </div>
             </div>
 
-            {/* Right: Preview */}
-            <div className="flex flex-col h-full">
+            {/* Right: Preview - sticky full-height panel */}
+            <div className="flex flex-col h-full sticky top-0">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold text-lg text-primary">Live Preview</h3>
                 </div>
-                <div className="flex-1 bg-gray-100 dark:bg-zinc-900 rounded-xl overflow-hidden border shadow-inner">
+                <div className="flex-1 min-h-0 bg-gray-100 dark:bg-zinc-900 rounded-xl overflow-hidden border shadow-inner">
                     <PDFPreview data={{ ...formData, totalNet: totals.net, vat: totals.vat, totalGross: totals.gross }} />
                 </div>
             </div>

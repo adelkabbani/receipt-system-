@@ -24,6 +24,7 @@ model Product {
 model Invoice {
   id          Int        @id @default(autoincrement())
   offerNumber String     @unique
+  offerCount  Int        @default(1) // Track the numeric sequence
   clientName  String
   date        DateTime
   totalNet    Float
