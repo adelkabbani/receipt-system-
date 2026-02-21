@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id            Int      @id @default(autoincrement())
+  itemCode      String?
+  category      String?
+  name          String
+  description   String?
+  hsCode        String?
+  amount        Float?   // Quantity amount (e.g. 180 for 180Kg, or 208 for 208L)
+  measureUnit   String?  @default("L") // "L", "kg", "g"
+  packagePrice  Float    @default(0)   // Total price for this entire package
+  pricePerLiter Float    @default(0)   // Price per liter (only used for L-based products)
+  lineItems     LineItem[]
+}
+
+model Invoice {
+  id          Int        @id @default(autoincrement())
+  offerNumber String     @unique
+  clientName  String
+  date        DateTime
+  totalNet    Float
+  vat         Float
+  lineItems   LineItem[]
+}
+
+model LineItem {
+  id        Int     @id @default(autoincrement())
+  quantity  Float
+  unit      String
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoiceId Int
+}
