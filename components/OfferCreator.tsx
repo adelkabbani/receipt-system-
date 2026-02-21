@@ -47,6 +47,22 @@ export function OfferCreator({ products }: { products: any[] }) {
 
     const [totals, setTotals] = useState({ net: 0, vat: 0, gross: 0 });
 
+    // Performance: Debounced data for PDF preview
+    const [debouncedData, setDebouncedData] = useState<any>(null);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedData({
+                ...formData,
+                totalNet: totals.net,
+                vat: totals.vat,
+                totalGross: totals.gross
+            });
+        }, 750); // 750ms debounce delay
+
+        return () => clearTimeout(handler);
+    }, [formData, totals]);
+
     // Recalculate totals whenever lineItems change
     useEffect(() => {
         const net = formData.lineItems.reduce((acc, item) => {
@@ -519,7 +535,13 @@ export function OfferCreator({ products }: { products: any[] }) {
                     <h3 className="font-semibold text-lg text-primary">Live Preview</h3>
                 </div>
                 <div className="flex-1 min-h-0 bg-gray-100 dark:bg-zinc-900 rounded-xl overflow-hidden border shadow-inner">
-                    <PDFPreview data={{ ...formData, totalNet: totals.net, vat: totals.vat, totalGross: totals.gross }} />
+                    {debouncedData ? (
+                        <PDFPreview data={debouncedData} />
+                    ) : (
+                        <div className="h-full w-full flex items-center justify-center text-muted-foreground italic">
+                            Preparing Preview...
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

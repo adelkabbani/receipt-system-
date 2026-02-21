@@ -19,6 +19,18 @@ model Product {
   packagePrice  Float    @default(0)   // Total price for this entire package
   pricePerLiter Float    @default(0)   // Price per liter (only used for L-based products)
   lineItems     LineItem[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Settings {
+  id                  Int      @id @default(1)
+  defaultVatRate      Float    @default(19)
+  defaultProfitMargin Float    @default(0)
+  companyName         String   @default("Shikh Al Ard General Trading")
+  logoPath            String?  @default("/kinan logo .png")
+  updatedAt           DateTime @updatedAt
 }
 
 model Invoice {
@@ -30,14 +42,23 @@ model Invoice {
   totalNet    Float
   vat         Float
   lineItems   LineItem[]
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 model LineItem {
-  id        Int     @id @default(autoincrement())
-  quantity  Float
-  unit      String
-  product   Product @relation(fields: [productId], references: [id])
-  productId Int
-  invoice   Invoice @relation(fields: [invoiceId], references: [id])
-  invoiceId Int
+  id                Int      @id @default(autoincrement())
+  quantity          Float
+  unit              String
+  priceAtTimeOfSale Float    @default(0) // Historical snapshot
+
+  product           Product? @relation(fields: [productId], references: [id])
+  productId         Int?     // Optional if product deleted
+
+  invoice           Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId         Int
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }

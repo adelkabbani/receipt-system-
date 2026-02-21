@@ -88,13 +88,14 @@ export async function saveInvoice(data: any) {
             offerCount: nextCount,
             clientName: data.billingName || "Unknown Client",
             date: data.date ? new Date(data.date) : new Date(),
-            totalNet: data.totalNet || 0,
+            totalNet: data.net || 0,
             vat: data.vat || 0,
             lineItems: {
                 create: (data.lineItems || []).map((item: any) => ({
                     quantity: Number(item.quantity) || 0,
                     unit: item.measureUnit || "L",
-                    productId: Number(item.productId) || 0,
+                    priceAtTimeOfSale: Number(item.packagePrice) || 0,
+                    productId: item.productId ? Number(item.productId) : null,
                 }))
             }
         },
