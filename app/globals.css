@@ -74,3 +74,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .gold-glass {
+    @apply bg-white/10 dark:bg-black/20 backdrop-blur-2xl border border-white/20;
+    box-shadow: 0 8px 32px 0 rgba(212, 175, 55, 0.15);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gold-glass::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid transparent;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(212,175,55,0.5), transparent, rgba(212,175,55,0.5)) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}

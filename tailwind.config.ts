@@ -52,6 +52,19 @@ const config = {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
+                gold: {
+                    50: '#FFFDF0',
+                    100: '#FDF7D5',
+                    200: '#F9EA9D',
+                    300: '#F4D864',
+                    400: '#EFBD33', // Primary Gold
+                    500: '#D4AF37', // Metallic Gold
+                    600: '#B8860B', // Dark Gold
+                },
+            },
+            backgroundImage: {
+                'gold-gradient': 'linear-gradient(to right, #B8860B, #D4AF37, #F4D864, #D4AF37, #B8860B)',
+                'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
             },
             borderRadius: {
                 lg: "var(--radius)",
@@ -67,10 +80,21 @@ const config = {
                     from: { height: "var(--radix-accordion-content-height)" },
                     to: { height: "0" },
                 },
+                shine: {
+                    '0%': { transform: 'translateX(-100%)' },
+                    '20%': { transform: 'translateX(100%)' },
+                    '100%': { transform: 'translateX(100%)' },
+                },
+                'pulse-gold': {
+                    '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                    '50%': { opacity: '0.8', transform: 'scale(1.05)', filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.4))' },
+                }
             },
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
+                'shine': 'shine 8s infinite linear',
+                'pulse-gold': 'pulse-gold 4s infinite ease-in-out',
             },
         },
     },

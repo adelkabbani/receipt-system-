@@ -19,20 +19,30 @@ export function Sidebar() {
     return (
         <div className="space-y-4 py-4 flex flex-col h-full bg-[#111827] text-white">
             <div className="px-3 py-2 flex-1">
-                <Link href="/" className="flex items-center pl-3 mb-10 group">
-                    <div className="relative w-14 h-14 mr-3 flex-shrink-0 transition-transform group-hover:scale-110">
-                        <Image
-                            src="/logo.png"
-                            alt="Logo"
-                            fill
-                            className="object-contain"
-                        />
+                <Link href="/" className="flex flex-col items-center mb-10 group">
+                    <div className="relative w-20 h-20 mb-3 flex items-center justify-center">
+                        {/* Golden pulsing ring */}
+                        <div className="absolute inset-0 rounded-full bg-gold-500/20 animate-pulse-gold" />
+
+                        {/* Gold Glass Pod */}
+                        <div className="gold-glass relative w-16 h-16 rounded-full flex items-center justify-center p-2 border-gold-500/30 overflow-hidden">
+                            {/* Shine overlay */}
+                            <div className="absolute inset-0 bg-gold-gradient opacity-0 group-hover:opacity-20 transition-opacity animate-shine pointer-events-none" />
+
+                            <Image
+                                src="/logo.png"
+                                alt="Logo"
+                                width={48}
+                                height={48}
+                                className="object-contain relative z-10"
+                            />
+                        </div>
                     </div>
-                    <div className="flex flex-col">
-                        <h1 className="text-sm font-bold leading-tight text-white/90 group-hover:text-white transition-colors">
+                    <div className="flex flex-col items-center">
+                        <h1 className="text-sm font-black leading-tight bg-gradient-to-tr from-gold-600 via-gold-400 to-gold-700 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-500 uppercase tracking-wider">
                             Shikh AlArd
                         </h1>
-                        <span className="text-[10px] uppercase tracking-tighter text-zinc-500 font-medium leading-none">
+                        <span className="text-[9px] uppercase tracking-[0.2em] text-gold-300/60 font-medium leading-none mt-1">
                             General Trading
                         </span>
                     </div>

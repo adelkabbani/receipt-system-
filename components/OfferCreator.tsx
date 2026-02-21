@@ -158,10 +158,10 @@ export function OfferCreator({ products }: { products: any[] }) {
             <div className="flex flex-col space-y-6 overflow-y-auto pr-2 pb-4">
 
                 {/* Offer Details Card */}
-                <div className="space-y-4 rounded-xl border p-6 bg-white/40 dark:bg-black/40 backdrop-blur-md shadow-sm transition-all hover:shadow-md border-white/20">
+                <div className="space-y-4 rounded-xl p-6 gold-glass shadow-sm transition-all hover:shadow-[0_8px_40px_rgba(212,175,55,0.2)] border-gold-500/20">
                     <div className="flex items-center justify-between">
-                        <h3 className="font-semibold text-lg flex items-center text-primary">
-                            <FileText className="mr-2 h-5 w-5" /> Receipt Details
+                        <h3 className="font-bold text-lg flex items-center bg-gradient-to-r from-gold-600 to-gold-400 bg-clip-text text-transparent">
+                            <FileText className="mr-2 h-5 w-5 text-gold-500" /> Receipt Details
                         </h3>
                     </div>
 
@@ -174,7 +174,7 @@ export function OfferCreator({ products }: { products: any[] }) {
                                     onClick={() => setFormData(prev => ({ ...prev, location: 'cairo' }))}
                                     className={cn(
                                         "px-3 py-1 rounded-md text-xs font-medium transition-all",
-                                        formData.location === 'cairo' ? "bg-white dark:bg-black shadow-sm text-primary" : "text-muted-foreground hover:text-foreground"
+                                        formData.location === 'cairo' ? "bg-gold-500 text-black shadow-[0_0_10px_rgba(212,175,55,0.4)]" : "text-muted-foreground hover:text-foreground"
                                     )}
                                 >
                                     Cairo
@@ -183,7 +183,7 @@ export function OfferCreator({ products }: { products: any[] }) {
                                     onClick={() => setFormData(prev => ({ ...prev, location: 'damascus' }))}
                                     className={cn(
                                         "px-3 py-1 rounded-md text-xs font-medium transition-all",
-                                        formData.location === 'damascus' ? "bg-white dark:bg-black shadow-sm text-primary" : "text-muted-foreground hover:text-foreground"
+                                        formData.location === 'damascus' ? "bg-gold-500 text-black shadow-[0_0_10px_rgba(212,175,55,0.4)]" : "text-muted-foreground hover:text-foreground"
                                     )}
                                 >
                                     Damascus
@@ -198,7 +198,7 @@ export function OfferCreator({ products }: { products: any[] }) {
                                     onClick={() => setFormData(prev => ({ ...prev, branch: 'moller' }))}
                                     className={cn(
                                         "px-3 py-1 rounded-md text-xs font-medium transition-all",
-                                        formData.branch === 'moller' ? "bg-white dark:bg-black shadow-sm text-primary" : "text-muted-foreground hover:text-foreground"
+                                        formData.branch === 'moller' ? "bg-gold-500 text-black shadow-[0_0_10px_rgba(212,175,55,0.4)]" : "text-muted-foreground hover:text-foreground"
                                     )}
                                 >
                                     Moller
@@ -207,7 +207,7 @@ export function OfferCreator({ products }: { products: any[] }) {
                                     onClick={() => setFormData(prev => ({ ...prev, branch: 'gpc' }))}
                                     className={cn(
                                         "px-3 py-1 rounded-md text-xs font-medium transition-all",
-                                        formData.branch === 'gpc' ? "bg-white dark:bg-black shadow-sm text-primary" : "text-muted-foreground hover:text-foreground"
+                                        formData.branch === 'gpc' ? "bg-gold-500 text-black shadow-[0_0_10px_rgba(212,175,55,0.4)]" : "text-muted-foreground hover:text-foreground"
                                     )}
                                 >
                                     GPC
@@ -296,14 +296,14 @@ export function OfferCreator({ products }: { products: any[] }) {
                 </div>
 
                 {/* Products Card */}
-                <div className="space-y-4 rounded-xl border p-6 bg-white/40 dark:bg-black/40 backdrop-blur-md shadow-sm border-white/20 flex-1">
+                <div className="space-y-4 rounded-xl p-6 gold-glass shadow-sm border-gold-500/20 flex-1">
                     <div className="flex items-center justify-between">
-                        <h3 className="font-semibold text-lg text-primary">Products</h3>
+                        <h3 className="font-bold text-lg bg-gradient-to-r from-gold-600 to-gold-400 bg-clip-text text-transparent">Products</h3>
                     </div>
 
                     <div className="space-y-4">
                         {formData.lineItems.map((item, index) => (
-                            <div key={index} className="flex flex-col gap-3 p-4 border rounded-xl bg-white/30 dark:bg-black/20 hover:bg-white/50 dark:hover:bg-black/30 transition-colors">
+                            <div key={index} className="flex flex-col gap-3 p-4 border rounded-xl bg-white/5 dark:bg-black/20 hover:bg-gold-500/5 transition-colors border-gold-500/10">
                                 <div className="flex gap-2">
                                     <div className="flex-1 space-y-1">
                                         <Label className="text-xs text-muted-foreground">Product Name</Label>
@@ -442,7 +442,7 @@ export function OfferCreator({ products }: { products: any[] }) {
                     </div>
 
                     <div className="flex justify-center mt-6">
-                        <Button onClick={addLineItem} variant="outline" className="w-full max-w-sm gap-2 border-dashed border-primary/40 hover:border-primary hover:bg-primary/5 transition-all">
+                        <Button onClick={addLineItem} variant="outline" className="w-full max-w-sm gap-2 border-dashed border-gold-500/40 hover:border-gold-500 hover:bg-gold-500/5 transition-all text-gold-600 dark:text-gold-400">
                             <Plus className="h-4 w-4" />
                             {formData.lineItems.length === 0 ? "Add Item" : "Add Another Item"}
                         </Button>
@@ -450,7 +450,7 @@ export function OfferCreator({ products }: { products: any[] }) {
                 </div>
 
                 {/* Totals Card */}
-                <div className="rounded-xl border p-6 bg-white/40 dark:bg-black/40 backdrop-blur-md shadow-sm border-white/20">
+                <div className="rounded-xl p-6 gold-glass shadow-sm border-gold-500/20">
                     <div className="flex justify-between text-base">
                         <span className="text-muted-foreground">Subtotal:</span>
                         <span className="font-mono">€{totals.net.toFixed(2)}</span>
@@ -474,7 +474,7 @@ export function OfferCreator({ products }: { products: any[] }) {
                     </div>
                     <div className="flex justify-between font-bold text-xl mt-4 pt-4 border-t border-border/50">
                         <span>Total:</span>
-                        <span className="text-primary font-mono">€{totals.gross.toFixed(2)}</span>
+                        <span className="text-gold-500 font-mono">€{totals.gross.toFixed(2)}</span>
                     </div>
                 </div>
             </div>

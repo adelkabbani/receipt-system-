@@ -71,7 +71,7 @@ export function InventoryTable({ products }: { products: Product[] }) {
     return (
         <div className="space-y-4">
             <div className="flex justify-between items-center">
-                <h2 className="text-xl font-bold">Products List</h2>
+                <h2 className="text-xl font-bold bg-gradient-to-r from-gold-600 to-gold-400 bg-clip-text text-transparent uppercase tracking-wider">Products Inventory</h2>
                 <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                         <Button><Plus className="mr-2 h-4 w-4" /> Add Product</Button>
@@ -210,7 +210,7 @@ export function InventoryTable({ products }: { products: Product[] }) {
                 </DialogContent>
             </Dialog>
 
-            <div className="rounded-md border overflow-x-auto">
+            <div className="gold-glass rounded-xl shadow-sm border-gold-500/20 overflow-x-auto">
                 <Table>
                     <TableHeader>
                         <TableRow>

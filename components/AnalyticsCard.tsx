@@ -10,15 +10,15 @@ interface AnalyticsCardProps {
 
 export function AnalyticsCard({ title, value, description, icon: Icon }: AnalyticsCardProps) {
     return (
-        <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{title}</CardTitle>
-                <Icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-                <div className="text-2xl font-bold">{value}</div>
+        <div className="gold-glass rounded-xl p-6 shadow-sm border-gold-500/20">
+            <div className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <h3 className="text-sm font-medium bg-gradient-to-r from-gold-600 to-gold-400 bg-clip-text text-transparent">{title}</h3>
+                <Icon className="h-4 w-4 text-gold-500" />
+            </div>
+            <div className="mt-2">
+                <div className="text-2xl font-bold text-primary">{value}</div>
                 <p className="text-xs text-muted-foreground">{description}</p>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     );
 }
