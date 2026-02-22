@@ -2,111 +2,69 @@ const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const { fork } = require('child_process');
 const fs = require('fs');
-const net = require('net');
 
 let mainWindow;
 let nextApp;
 
-function getAvailablePort() {
-    return new Promise((resolve, reject) => {
-        const server = net.createServer();
-        server.listen(0, () => {
-            const port = server.address().port;
-            server.close(() => resolve(port));
-        });
-        server.on('error', reject);
-    });
-}
+// Create a log file so we can see what's happening inside the .exe
+const logPath = path.join(app.getPath('userData'), 'error_log.txt');
+const logStream = fs.createWriteStream(logPath, { flags: 'a' });
 
 function setupDatabase() {
-    // 1. Get the safe, persistent user directory (%APPDATA% on Windows)
     const userDataPath = app.getPath('userData');
     const dbFileName = 'dev.db';
     const writableDbPath = path.join(userDataPath, dbFileName);
-
-    // 2. Locate the bundled database inside the .exe
     const bundledDbPath = app.isPackaged
         ? path.join(process.resourcesPath, 'prisma', dbFileName)
         : path.join(__dirname, 'prisma', dbFileName);
 
-    // 3. THE UPDATE SAFEGUARD: Check if the user already has data
     if (!fs.existsSync(writableDbPath)) {
-        // NEW INSTALL: Copy our bundled 226 products to their machine
-        console.log("First install detected. Copying database...");
-
-        // Make sure the directory exists just in case
-        if (!fs.existsSync(userDataPath)) {
-            fs.mkdirSync(userDataPath, { recursive: true });
-        }
-
-        // Ensure the source database exists before copying
-        if (fs.existsSync(bundledDbPath)) {
-            fs.copyFileSync(bundledDbPath, writableDbPath);
-        } else {
-            console.error("Bundled database not found at:", bundledDbPath);
-        }
-    } else {
-        // UPDATE DETECTED: Do nothing! Leave their data exactly as it is.
-        console.log("Existing installation detected. Preserving user's database.");
+        if (!fs.existsSync(userDataPath)) fs.mkdirSync(userDataPath, { recursive: true });
+        if (fs.existsSync(bundledDbPath)) fs.copyFileSync(bundledDbPath, writableDbPath);
     }
-
-    // 4. Force Prisma to use this persistent database
     process.env.DATABASE_URL = `file:${writableDbPath}`;
+    logStream.write(`Database Path: ${process.env.DATABASE_URL}\n`);
 }
 
-function createWindow(port = 3000) {
+function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1280,
         height: 800,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-        },
+        webPreferences: { nodeIntegration: false, contextIsolation: true },
         autoHideMenuBar: true,
     });
 
+    // OPEN DEVTOOLS IN PRODUCTION so we can see frontend errors
+    mainWindow.webContents.openDevTools();
+
     const loadApp = () => {
-        mainWindow.loadURL(`http://localhost:${port}`).catch((err) => {
-            console.log("Next.js not fully ready yet, retrying in 1 second...");
-            setTimeout(loadApp, 1000); // Retry until it succeeds
+        mainWindow.loadURL(`http://localhost:3000`).catch(() => {
+            logStream.write("Next.js not ready, retrying...\n");
+            setTimeout(loadApp, 1000);
         });
     };
-
     loadApp();
-
-    mainWindow.on('closed', function () {
-        mainWindow = null;
-    });
 }
 
 app.on('ready', () => {
     setupDatabase();
+    if (app.isPackaged) {
+        const serverPath = path.join(process.resourcesPath, 'standalone', 'server.js');
+        logStream.write(`Starting server from: ${serverPath}\n`);
 
-    const isDev = !app.isPackaged;
+        // Capture all server output to our log file
+        nextApp = fork(serverPath, [], {
+            env: { ...process.env, PORT: 3000, NODE_ENV: 'production' },
+            stdio: ['ignore', 'pipe', 'pipe', 'ipc']
+        });
 
-    if (isDev) {
-        createWindow();
-    } else {
-        if (app.isPackaged) {
-            const serverPath = path.join(process.resourcesPath, 'standalone', 'server.js');
-            // Start the standalone server directly without needing NPM
-            nextApp = fork(serverPath, [], {
-                env: { ...process.env, PORT: 3000, NODE_ENV: 'production' },
-                stdio: 'ignore'
-            });
+        nextApp.stdout.on('data', (data) => logStream.write(`STDOUT: ${data}\n`));
+        nextApp.stderr.on('data', (data) => logStream.write(`STDERR: ${data}\n`));
 
-            // Ensure mainWindow gets initialized
-            createWindow(3000);
-
-            // Adaptive Retry Logic: Try to load the page every 1s until the server is up
-            const loadWindow = () => {
-                mainWindow.loadURL('http://localhost:3000').catch(() => {
-                    setTimeout(loadWindow, 1000);
-                });
-            };
-            loadWindow();
-        }
+        nextApp.on('error', (err) => logStream.write(`SERVER ERROR: ${err.message}\n`));
+        nextApp.on('exit', (code) => logStream.write(`SERVER EXITED with code: ${code}\n`));
     }
+    createWindow();
 });
 
 app.on('window-all-closed', function () {
@@ -118,6 +76,6 @@ app.on('window-all-closed', function () {
 
 app.on('activate', function () {
     if (mainWindow === null) {
-        createWindow(3000);
+        createWindow();
     }
 });
