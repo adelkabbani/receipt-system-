@@ -73,7 +73,7 @@ function createWindow(port = 3000) {
     });
 }
 
-app.on('ready', () => {
+app.on('ready', async () => {
     setupDatabase();
 
     const isDev = !app.isPackaged;
@@ -84,14 +84,22 @@ app.on('ready', () => {
         // PRODUCTION: Run the standalone server.js directly
         const serverPath = path.join(process.resourcesPath, 'standalone', 'server.js');
 
+        // Ensure the standalone server doesn't crash from port conflicts
+        let portToUse = 3000;
+        try {
+            portToUse = await getAvailablePort();
+        } catch (err) {
+            console.error("Could not find dynamic port. Falling back to 3000.");
+        }
+
         // Start server on a specific port
         nextApp = fork(serverPath, [], {
-            env: { ...process.env, PORT: 3000, NODE_ENV: 'production' }
+            env: { ...process.env, PORT: portToUse, HOSTNAME: '127.0.0.1', NODE_ENV: 'production' }
         });
 
         // Give the server 3 seconds to warm up before opening the window
         setTimeout(() => {
-            createWindow(3000);
+            createWindow(portToUse);
         }, 3000);
     }
 });
