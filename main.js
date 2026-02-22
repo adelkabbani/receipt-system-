@@ -65,41 +65,39 @@ function createWindow(port = 3000) {
         autoHideMenuBar: true,
     });
 
-    // Load the Next.js app
-    mainWindow.loadURL(`http://localhost:${port}`);
+    const loadApp = () => {
+        mainWindow.loadURL(`http://localhost:${port}`).catch((err) => {
+            console.log("Next.js not fully ready yet, retrying in 1 second...");
+            setTimeout(loadApp, 1000); // Retry until it succeeds
+        });
+    };
+
+    loadApp();
 
     mainWindow.on('closed', function () {
         mainWindow = null;
     });
 }
 
-app.on('ready', async () => {
+app.on('ready', () => {
     setupDatabase();
 
     const isDev = !app.isPackaged;
 
     if (isDev) {
-        createWindow(3000);
+        createWindow();
     } else {
         // PRODUCTION: Run the standalone server.js directly
         const serverPath = path.join(process.resourcesPath, 'standalone', 'server.js');
 
-        // Ensure the standalone server doesn't crash from port conflicts
-        let portToUse = 3000;
-        try {
-            portToUse = await getAvailablePort();
-        } catch (err) {
-            console.error("Could not find dynamic port. Falling back to 3000.");
-        }
-
         // Start server on a specific port
         nextApp = fork(serverPath, [], {
-            env: { ...process.env, PORT: portToUse, HOSTNAME: '127.0.0.1', NODE_ENV: 'production' }
+            env: { ...process.env, PORT: 3000, NODE_ENV: 'production' }
         });
 
         // Give the server 3 seconds to warm up before opening the window
         setTimeout(() => {
-            createWindow(portToUse);
+            createWindow(3000);
         }, 3000);
     }
 });
@@ -113,8 +111,6 @@ app.on('window-all-closed', function () {
 
 app.on('activate', function () {
     if (mainWindow === null) {
-        // If app is activated and no mainWindow, we assume port 3000 fallback or somehow track the running port
-        // But typically this is only needed on macOS
         createWindow(3000);
     }
 });
