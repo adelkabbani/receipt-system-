@@ -1,7 +1,8 @@
 import prisma from "@/lib/prisma";
 import dynamic from "next/dynamic";
+import { getSettings } from "@/app/inventory/actions";
 
-const CatalogViewer = dynamic(() => import('@/components/CatalogViewer').then(mod => mod.CatalogViewer), {
+const CatalogViewer = dynamic<{ products: any[], defaultMargin: number }>(() => import('@/components/CatalogViewer').then(mod => mod.CatalogViewer), {
     ssr: false,
     loading: () => <div className="h-[600px] flex items-center justify-center bg-muted/20 text-muted-foreground rounded-md">Loading Catalog Viewer...</div>
 });
@@ -10,6 +11,10 @@ export default async function OffersPage() {
     const products = await prisma.product.findMany({
         orderBy: [{ category: 'asc' }, { name: 'asc' }],
     });
+
+    // Fetch default profit margin
+    const settings = await getSettings();
+    const defaultMargin = settings.defaultProfitMargin || 0;
 
     return (
         <div className="h-full p-6 space-y-4">
@@ -21,7 +26,7 @@ export default async function OffersPage() {
                     </p>
                 </div>
             </div>
-            <CatalogViewer products={products} />
+            <CatalogViewer products={products} defaultMargin={defaultMargin} />
         </div>
     );
 }

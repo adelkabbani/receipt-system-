@@ -4,6 +4,8 @@ import { useState, useEffect, useMemo } from "react";
 import { Document, Page, Text, View, StyleSheet, PDFViewer, Image } from "@react-pdf/renderer";
 import { COMPANY_CONFIG } from "@/lib/config";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 // ─── Styles ─────────────────────────────────────────────────────────────────
 
@@ -128,9 +130,10 @@ function CatalogDocument({ products, dateStr }: { products: any[]; dateStr: stri
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export function CatalogViewer({ products }: { products: any[] }) {
+export function CatalogViewer({ products, defaultMargin = 0 }: { products: any[], defaultMargin?: number }) {
     const [isClient, setIsClient] = useState(false);
     const [filter, setFilter] = useState<string>("all");
+    const [profitMargin, setProfitMargin] = useState<number>(defaultMargin);
 
     useEffect(() => {
         setIsClient(true);
@@ -142,11 +145,21 @@ export function CatalogViewer({ products }: { products: any[] }) {
         return cats;
     }, [products]);
 
-    // Filtered products
+    // Filtered products with applied margin
     const filtered = useMemo(() => {
-        if (filter === "all") return products;
-        return products.filter((p) => (p.category || "Other") === filter);
-    }, [products, filter]);
+        let list = products;
+        if (filter !== "all") {
+            list = products.filter((p) => (p.category || "Other") === filter);
+        }
+
+        const marginMultiplier = 1 + (profitMargin / 100);
+
+        return list.map(p => ({
+            ...p,
+            packagePrice: Number(p.packagePrice || 0) * marginMultiplier,
+            pricePerLiter: Number(p.pricePerLiter || 0) * marginMultiplier
+        }));
+    }, [products, filter, profitMargin]);
 
     const dateStr = new Date().toLocaleDateString("en-GB", {
         day: "2-digit",
@@ -181,6 +194,16 @@ export function CatalogViewer({ products }: { products: any[] }) {
                         </Button>
                     );
                 })}
+
+                <div className="ml-auto flex items-center space-x-2 bg-secondary/50 px-3 py-1.5 rounded-full border border-border/50">
+                    <Label className="text-xs font-medium mr-2 whitespace-nowrap">Global Profit Margin %:</Label>
+                    <Input
+                        type="number"
+                        value={profitMargin}
+                        onChange={(e) => setProfitMargin(Number(e.target.value))}
+                        className="w-16 h-7 text-xs bg-white text-black p-1"
+                    />
+                </div>
             </div>
 
             {/* PDF Viewer */}
