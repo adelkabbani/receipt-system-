@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node -e \"const fs=require('fs'); fs.cpSync('public', '.next/standalone/public', {recursive:true}); fs.cpSync('.next/static', '.next/standalone/.next/static', {recursive:true});\"",
+    "build": "next build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static",
     "start": "next start",
     "lint": "next lint",
     "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron .\"",

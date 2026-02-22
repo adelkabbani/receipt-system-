@@ -87,18 +87,25 @@ app.on('ready', () => {
     if (isDev) {
         createWindow();
     } else {
-        // PRODUCTION: Run the standalone server.js directly
-        const serverPath = path.join(process.resourcesPath, 'standalone', 'server.js');
+        if (app.isPackaged) {
+            const serverPath = path.join(process.resourcesPath, 'standalone', 'server.js');
+            // Start the standalone server directly without needing NPM
+            nextApp = fork(serverPath, [], {
+                env: { ...process.env, PORT: 3000, NODE_ENV: 'production' },
+                stdio: 'ignore'
+            });
 
-        // Start server on a specific port
-        nextApp = fork(serverPath, [], {
-            env: { ...process.env, PORT: 3000, NODE_ENV: 'production' }
-        });
-
-        // Give the server 3 seconds to warm up before opening the window
-        setTimeout(() => {
+            // Ensure mainWindow gets initialized
             createWindow(3000);
-        }, 3000);
+
+            // Adaptive Retry Logic: Try to load the page every 1s until the server is up
+            const loadWindow = () => {
+                mainWindow.loadURL('http://localhost:3000').catch(() => {
+                    setTimeout(loadWindow, 1000);
+                });
+            };
+            loadWindow();
+        }
     }
 });
 
