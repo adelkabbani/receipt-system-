@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
     // Columns
     colCode: { width: "15%", fontSize: 8, color: "#444" },
     colName: { width: "47%", fontSize: 8, color: "#222" },
+    colNameWrapper: { width: "47%", flexDirection: "column", paddingRight: 5 },
+    colNameText: { fontSize: 8, color: "#222", fontWeight: "bold" },
+    colDescText: { fontSize: 6, color: "#666", marginTop: 1.5, paddingRight: 4 },
     colPkg: { width: "13%", fontSize: 8, textAlign: "right", color: "#444" },
     colPrice: { width: "13%", fontSize: 8, textAlign: "right", color: "#222", fontWeight: "bold" },
     colPPL: { width: "12%", fontSize: 8, textAlign: "right", color: "#666" },
@@ -100,7 +103,12 @@ function CatalogDocument({ products, dateStr }: { products: any[]; dateStr: stri
                                 style={[styles.tableRow, idx % 2 === 1 ? styles.tableRowAlt : {}]}
                             >
                                 <Text style={styles.colCode}>{product.itemCode || "—"}</Text>
-                                <Text style={styles.colName}>{product.name}</Text>
+                                <View style={styles.colNameWrapper}>
+                                    <Text style={styles.colNameText}>{product.name}</Text>
+                                    {product.description ? (
+                                        <Text style={styles.colDescText}>{product.description}</Text>
+                                    ) : null}
+                                </View>
                                 <Text style={styles.colPkg}>
                                     {product.amount || 0}{product.measureUnit || "L"}
                                 </Text>
