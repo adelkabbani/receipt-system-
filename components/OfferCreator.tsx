@@ -216,7 +216,7 @@ export function OfferCreator({ products }: { products: any[] }) {
             <div className="flex flex-col space-y-6 overflow-y-auto pr-2 pb-4">
 
                 {/* Offer Details Card */}
-                <div className="space-y-4 rounded-xl p-6 gold-glass shadow-sm transition-all hover:shadow-[0_8px_40px_rgba(212,175,55,0.2)] border-gold-500/20">
+                <div className="shrink-0 space-y-4 rounded-xl p-6 gold-glass shadow-sm transition-all hover:shadow-[0_8px_40px_rgba(212,175,55,0.2)] border-gold-500/20">
                     <div className="flex items-center justify-between">
                         <h3 className="font-bold text-lg flex items-center bg-gradient-to-r from-gold-600 to-gold-400 bg-clip-text text-transparent">
                             <FileText className="mr-2 h-5 w-5 text-gold-500" /> Receipt Details
@@ -343,7 +343,7 @@ export function OfferCreator({ products }: { products: any[] }) {
                 </div>
 
                 {/* Products Card */}
-                <div className="space-y-4 rounded-xl p-6 gold-glass shadow-sm border-gold-500/20 flex flex-col max-h-[600px]">
+                <div className="shrink-0 space-y-4 rounded-xl p-6 gold-glass shadow-sm border-gold-500/20 flex flex-col max-h-[600px]">
                     <div className="flex items-center justify-between mb-2">
                         <h3 className="font-bold text-lg flex items-center bg-gradient-to-r from-gold-600 to-gold-400 bg-clip-text text-transparent">
                             Products
@@ -509,7 +509,7 @@ export function OfferCreator({ products }: { products: any[] }) {
                 </div>
 
                 {/* Totals Card */}
-                <div className="rounded-xl p-6 gold-glass shadow-sm border-gold-500/20 space-y-3">
+                <div className="shrink-0 rounded-xl p-6 gold-glass shadow-sm border-gold-500/20 space-y-3">
                     {/* Global Profit Margin Input */}
                     <div className="flex flex-col gap-2 p-3 bg-black/20 rounded-lg border border-gold-500/20 mb-2">
                         <Label className="text-gold-500 font-semibold tracking-wide text-xs uppercase">Global Profit Margin (%)</Label>
