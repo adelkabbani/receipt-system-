@@ -1,6 +1,6 @@
 {
   "name": "receipt-app",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "main": "main.js",
   "scripts": {
@@ -28,8 +28,17 @@
     "directories": {
       "output": "dist"
     },
+    "extraResources": [
+      {
+        "from": "prisma/",
+        "to": "prisma/",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
     "win": {
-      "target": "dir",
+      "target": "nsis",
       "icon": "public/favicon.ico",
       "forceCodeSigning": false,
       "verifyUpdateCodeSignature": false
