@@ -54,7 +54,7 @@ function setupDatabase() {
     process.env.DATABASE_URL = `file:${writableDbPath}`;
 }
 
-function createWindow(port) {
+function createWindow(port = 3000) {
     mainWindow = new BrowserWindow({
         width: 1280,
         height: 800,
@@ -65,7 +65,7 @@ function createWindow(port) {
         autoHideMenuBar: true,
     });
 
-    // Load the Next.js app on the dynamic port
+    // Load the Next.js app
     mainWindow.loadURL(`http://localhost:${port}`);
 
     mainWindow.on('closed', function () {
@@ -73,58 +73,26 @@ function createWindow(port) {
     });
 }
 
-app.on('ready', async () => {
+app.on('ready', () => {
     setupDatabase();
 
-    // Check if we are in development or production
     const isDev = !app.isPackaged;
 
     if (isDev) {
-        // In dev, assume the user is manually running 'npm run dev' on port 3000
         createWindow(3000);
     } else {
-        // In production, start the standalone server.js
-        console.log("Starting Next.js standalone server...");
+        // PRODUCTION: Run the standalone server.js directly
+        const serverPath = path.join(process.resourcesPath, 'standalone', 'server.js');
 
-        try {
-            const port = await getAvailablePort();
-            console.log("Found available port:", port);
+        // Start server on a specific port
+        nextApp = fork(serverPath, [], {
+            env: { ...process.env, PORT: 3000, NODE_ENV: 'production' }
+        });
 
-            const serverPath = path.join(__dirname, '.next', 'standalone', 'server.js');
-
-            if (!fs.existsSync(serverPath)) {
-                console.error("Standalone server not found at:", serverPath);
-            }
-
-            nextApp = fork(serverPath, [], {
-                env: {
-                    ...process.env,
-                    PORT: port,
-                    HOSTNAME: 'localhost',
-                    NODE_ENV: 'production'
-                },
-                stdio: 'pipe'
-            });
-
-            nextApp.stdout.on('data', (data) => {
-                console.log(`Next.js: ${data}`);
-                if (data.toString().includes(`http://localhost:${port}`) || data.toString().includes('Ready')) {
-                    if (!mainWindow) createWindow(port);
-                }
-            });
-
-            nextApp.stderr.on('data', (data) => {
-                console.error(`Next.js Error: ${data}`);
-            });
-
-            // Fallback: create window after a delay if "Ready" isn't caught
-            setTimeout(() => {
-                if (!mainWindow) createWindow(port);
-            }, 3000);
-
-        } catch (error) {
-            console.error("Failed to start standalone server:", error);
-        }
+        // Give the server 3 seconds to warm up before opening the window
+        setTimeout(() => {
+            createWindow(3000);
+        }, 3000);
     }
 });
 
