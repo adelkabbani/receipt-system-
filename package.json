@@ -9,7 +9,12 @@
     "start": "next start",
     "lint": "next lint",
     "electron-dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron-pack": "npm run build && electron-builder"
+    "electron-pack": "npm run build && electron-builder",
+    "backup-db": "node -e \"const fs=require('fs');const src='prisma/dev.db';if(fs.existsSync(src)){const ts=new Date().toISOString().replace(/[:.]/g,'-');fs.copyFileSync(src,'prisma/dev.backup-'+ts+'.db');console.log('Backup created: dev.backup-'+ts+'.db');}else{console.log('No database to back up.');}\"",
+    "seed": "node prisma/seed.js"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   },
   "build": {
     "appId": "com.antigravity.receipt",
@@ -62,7 +67,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
-    "prisma": "^5.13.0",
+    "prisma": "^5.22.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
     "wait-on": "^9.0.4"

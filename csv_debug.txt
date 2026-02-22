@@ -1,0 +1,89 @@
+=== ALL FILES IN DIRECTORY ===
+.env
+.git
+.gitignore
+.next
+analyze_data.js
+app
+audit_db.js
+build_cat_log.txt
+build_final_log.txt
+build_log.txt
+build_refactor_log.txt
+build_textarea_log.txt
+check_db.js
+components
+components.json
+count_enriched.js
+count_result.txt
+db_dump.json
+dist
+electron_pack_log.txt
+electron_pack_log_2.txt
+electron_pack_log_3.txt
+electron_pack_log_4.txt
+expansion_check.txt
+Export Prices .10.2025 .csv
+export_db.js
+git_log_check.txt
+git_status_check.txt
+git_status_out.txt
+install_deps_log.txt
+install_log.txt
+install_rdp_log.txt
+lib
+main.js
+next-env.d.ts
+next.config.js
+node_modules
+package-lock.json
+package.json
+postcss.config.js
+preview_csv.js
+prisma
+prisma_push_log.txt
+public
+query_db.js
+raw_inspect_db.js
+read_csv.js
+tailwind.config.ts
+test_expansion.js
+tsconfig.json
+
+=== CSV FILES FOUND ===
+Export Prices .10.2025 .csv
+
+=== FILE: Export Prices .10.2025 .csv ===
+Total lines: 368
+
+HEADER:
+ï»¿,,,,
+
+FIRST 20 ROWS:
+  1: ,,,,
+  2: ,,,,
+  3: ,,,,
+  4: ,,,,
+  5: ,,,,
+  6: Item Nr.,Description ,Content/L,Preis,Preis per L
+  7: PKW-MotorenÃ¶le,,,,
+  8: 210010200,MÃLLER SAE 0W-8,200,542.00 â¬,2.71 â¬
+  9: 210010060,JASO GLV-1,60,165.60 â¬,2.76 â¬
+  10: 210010005,,5,14.30 â¬,2.86 â¬
+  11: 210010004,,4,11.64 â¬,2.91 â¬
+  12: 210010001,,1,3.12 â¬,3.12 â¬
+  13: 210020200,MÃLLER SP SAE 0W-16 ,200,426.00 â¬,2.13 â¬
+  14: 210020060,API SP Resource Conserving;ILSAC GF-6B,60,131.40 â¬,2.19 â¬
+  15: 210020005,,5,11.70 â¬,2.34 â¬
+  16: 210020004,,4,9.56 â¬,2.39 â¬
+  17: 210020001,,1,2.61 â¬,2.61 â¬
+  18: 210030200,MÃLLER C5 SAE 0W-20 ,200,650.00 â¬,3.25 â¬
+  19: 210030060,"ACEA C5, API SN",60,198.60 â¬,3.31 â¬
+  20: 210030005,"MB 229.71, JLR STJLR 51.5122",5,17.30 â¬,3.46 â¬
+
+LAST 5 ROWS:
+  363: 230350020,"â¢	VW TL 774-J (G13) â¢ JIS K 2234",20,,
+  364: 230350005,,5,7.13 â¬,1.43 â¬
+  365: 230350015,,1.5,2.36 â¬,1.57 â¬
+  366: ,,,,
+  367: 1,,,,

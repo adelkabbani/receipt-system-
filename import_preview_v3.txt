@@ -1,0 +1,121 @@
+=== FINAL IMPORT PREVIEW ===
+Total product rows: 324
+Unique product names: 71
+
+=== CATEGORIES ===
+  Motor Oils: 167 rows
+  MÖLLER ATF 9HP: 5 rows
+  MÖLLER ATF HP8: 5 rows
+  MÖLLER ATF DEXRON III: 5 rows
+  MÖLLER ATF DEXRON IIIH: 5 rows
+  MÖLLER ATF 6HP: 5 rows
+  MÖLLER Power Steering Oil: 5 rows
+  MÖLLER ATF 17: 5 rows
+  MÖLLER ATF DCG: 5 rows
+  MÖLLER ATF HP7+: 5 rows
+  MÖLLER Gear GL-5 SAE 80W-90: 4 rows
+  MÖLLER Gear GL-4 SAE 80W-90: 4 rows
+  MÖLLER Gear SAE 85W-140: 4 rows
+  MÖLLER Gear GL-5 SAE 75W-80: 4 rows
+  MÖLLER Gear GL-5 SAE 75W-90: 4 rows
+  MÖLLER Gear SAE 90: 4 rows
+  MÖLLER Gear SAE 140: 88 rows
+
+=== SAMPLE PRODUCTS ===
+  1. [Motor Oils] 210010200 | "MÖLLER SAE 0W-8" | 200L | €542
+  2. [Motor Oils] 210010060 | "MÖLLER SAE 0W-8" | 60L | €165.6
+  3. [Motor Oils] 210010005 | "MÖLLER SAE 0W-8" | 5L | €14.3
+  4. [Motor Oils] 210010004 | "MÖLLER SAE 0W-8" | 4L | €11.64
+  5. [Motor Oils] 210010001 | "MÖLLER SAE 0W-8" | 1L | €3.12
+  6. [Motor Oils] 210020200 | "MÖLLER SP SAE 0W-16" | 200L | €426
+  7. [Motor Oils] 210020060 | "MÖLLER SP SAE 0W-16" | 60L | €131.4
+  8. [Motor Oils] 210020005 | "MÖLLER SP SAE 0W-16" | 5L | €11.7
+  9. [Motor Oils] 210020004 | "MÖLLER SP SAE 0W-16" | 4L | €9.56
+  10. [Motor Oils] 210020001 | "MÖLLER SP SAE 0W-16" | 1L | €2.61
+  11. [Motor Oils] 210030200 | "MÖLLER C5 SAE 0W-20" | 200L | €650
+  12. [Motor Oils] 210030060 | "MÖLLER C5 SAE 0W-20" | 60L | €198.6
+  13. [Motor Oils] 210030005 | "MÖLLER C5 SAE 0W-20" | 5L | €17.3
+  14. [Motor Oils] 210030004 | "MÖLLER C5 SAE 0W-20" | 4L | €14.04
+  15. [Motor Oils] 210030001 | "MÖLLER C5 SAE 0W-20" | 1L | €3.73
+  16. [Motor Oils] 210040200 | "MÖLLER C6 SAE 0W-20" | 200L | €698
+  17. [Motor Oils] 210040060 | "MÖLLER C6 SAE 0W-20" | 60L | €213
+  18. [Motor Oils] 210040005 | "MÖLLER C6 SAE 0W-20" | 5L | €18.5
+  19. [Motor Oils] 210040004 | "MÖLLER C6 SAE 0W-20" | 4L | €15
+  20. [Motor Oils] 210040001 | "MÖLLER C6 SAE 0W-20" | 1L | €3.97
+
+=== UNIQUE PRODUCT NAMES ===
+  1. MÖLLER SAE 0W-8
+  2. MÖLLER SP SAE 0W-16
+  3. MÖLLER C5 SAE 0W-20
+  4. MÖLLER C6 SAE 0W-20
+  5. MÖLLER SP  SAE 0W-20
+  6. MÖLLER 509 SAE 0W-20
+  7. MÖLLER SP  SAE 0W-30
+  8. MÖLLER 507 SAE 0W-30
+  9. MÖLLER C5 SAE 5W-20
+  10. MÖLLER SP SAE 5W-20
+  11. MÖLLER SP SAE 5W-30
+  12. MÖLLER 507 SAE 5W-30
+  13. MÖLLER SAE 5W-30
+  14. MÖLLER C4 SAE 5W-30
+  15. MÖLLER SP 507 SAE 5W-30
+  16. MÖLLER G1 SAE 5W-40
+  17. MÖLLER LL01 SAE 5W-40
+  18. MÖLLER SN Plus SAE 5W-40
+  19. MÖLLER LL04  SAE 5W-40
+  20. MÖLLER SN  SAE 10W-40
+  21. MÖLLER SL 10W-40
+  22. MÖLLER SP 10W-40
+  23. MÖLLER SN SAE 15W-40
+  24. MÖLLER SN SAE 20W-50
+  25. MÖLLER SN 10W-30
+  26. MÖLLER Truck Ci-4 SAE 10W-40
+  27. MÖLLER Truck Ci-4 SAE 15W-40
+  28. MÖLLER Truck Ci-4 SAE 20W-50
+  29. MÖLLER Truck HD SAE 40
+  30. MÖLLER Truck HD SAE 50
+  31. MÖLLER Truck HD SAE 60
+  32. MÖLLER ATF DCG II
+  33. MÖLLER ATF CVT
+  34. Mercedes-Benz MB 236.20
+  35. VW/Audi G 060 162/G 055 540
+  36. BMW 3 F35/5 F18/7F01,02/X1 E84/X3 F25/X5 E70/
+  37. DEXRON III
+  38. Yellow
+  39. BMW ETL 7045 / 7045E / 8072B, N402, LA 2634, LT 71141
+  40. Green
+  41. MB. 236.17
+  42. V.W 1.8TSI 2.0TSI; Audi 1.8TSI 2.0TSI
+  43. Suitable for car model Benz C W204(2011-)
+  44. API GL 4/5
+  45. API GL 4
+  46. API GL-5
+  47. Product 220320060
+  48. MÖLLER Hydro HLP 10
+  49. MÖLLER Hydro HLP 32
+  50. MÖLLER Hydro HLP 46
+  51. MÖLLER Hydro HLP 68
+  52. MÖLLER K2K-30
+  53. MÖLLER EP-KP2K-30
+  54. MÖLLER EP-KP3K-30
+  55. MÖLLER (Graphit) KF2K-30
+  56. DOT 5.1
+  57. Product 220590001
+  58. ECO ME
+  59. Product 220620001
+  60. DOT 3
+  61. Product 220600001
+  62. DOT 4
+  63. Product 220610001
+  64. DOT 3 HV
+  65. Product 220630001
+  66. MÖLLER AF G11 Concentrate
+  67. MÖLLER AF G11 Readymix -40°C
+  68. MÖLLER AF G12+ Concentrate
+  69. MÖLLER AF G12+ Readymix -40°C
+  70. MÖLLER AF G13 Concentrate
+  71. MÖLLER AF G13 Readymix -40°C
+
+=== RESULT ===
+Inserted: 324
+DB verified: 324

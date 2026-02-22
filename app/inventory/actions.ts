@@ -72,20 +72,18 @@ export async function deleteProduct(id: number) {
 }
 
 export async function saveInvoice(data: any) {
-    // 1. Find the last invoice to get the highest numeric part
-    // We use offerCount as the reliable numeric sequence
-    const lastInvoice = await prisma.invoice.findFirst({
-        orderBy: { offerCount: 'desc' },
-    });
+    // 1. Read the current sequence from Settings (authoritative, survives restarts)
+    let settings = await prisma.settings.findFirst({ where: { id: 1 } });
+    if (!settings) settings = await initSettings();
 
-    const nextCount = lastInvoice ? lastInvoice.offerCount + 1 : 1;
-    const formattedOfferNumber = `OFF-${nextCount.toString().padStart(4, '0')}`;
+    const currentNumber = settings.nextReceiptNumber;
+    const formattedOfferNumber = `OFF-${currentNumber.toString().padStart(4, '0')}`;
 
-    // 2. Create the record
+    // 2. Save the invoice with the current sequence number
     await prisma.invoice.create({
         data: {
             offerNumber: formattedOfferNumber,
-            offerCount: nextCount,
+            offerCount: currentNumber,
             clientName: data.billingName || "Unknown Client",
             date: data.date ? new Date(data.date) : new Date(),
             totalNet: data.net || 0,
@@ -101,7 +99,68 @@ export async function saveInvoice(data: any) {
         },
     });
 
+    // 3. Atomically increment the sequence in Settings for the next receipt
+    const nextNumber = currentNumber + 1;
+    await prisma.settings.update({
+        where: { id: 1 },
+        data: { nextReceiptNumber: nextNumber },
+    });
+
     revalidatePath("/offers");
-    const nextOfferNumber = `OFF-${(nextCount + 1).toString().padStart(4, '0')}`;
+    revalidatePath("/settings");
+
+    // Return the NEXT number so the UI can display it immediately
+    const nextOfferNumber = `OFF-${nextNumber.toString().padStart(4, '0')}`;
     return { success: true, nextOfferNumber };
+}
+
+export async function getSettings() {
+    let settings = await prisma.settings.findFirst({
+        where: { id: 1 }
+    });
+
+    if (!settings) {
+        settings = await initSettings();
+    }
+
+    return settings;
+}
+
+export async function initSettings() {
+    return await prisma.settings.upsert({
+        where: { id: 1 },
+        update: {},
+        create: {
+            id: 1,
+            companyName: "Shikh Al Ard General Trading",
+            defaultVatRate: 19,
+            defaultProfitMargin: 0,
+            logoPath: "/kinan logo .png",
+            nextReceiptNumber: 1,
+        }
+    });
+}
+
+export async function updateSettings(data: any) {
+    const updateData: any = {
+        companyName: data.companyName,
+        defaultVatRate: parseFloat(data.defaultVatRate),
+        defaultProfitMargin: parseFloat(data.defaultProfitMargin),
+        logoPath: data.logoPath,
+    };
+
+    // Only update nextReceiptNumber if explicitly provided (allows manual sequence override)
+    if (data.nextReceiptNumber !== undefined && data.nextReceiptNumber !== '' && !isNaN(parseInt(data.nextReceiptNumber))) {
+        updateData.nextReceiptNumber = parseInt(data.nextReceiptNumber);
+    }
+
+    const settings = await prisma.settings.update({
+        where: { id: 1 },
+        data: updateData,
+    });
+
+    revalidatePath("/");
+    revalidatePath("/settings");
+    revalidatePath("/offers/new");
+    return { success: true, settings };
 }

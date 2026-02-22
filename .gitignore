@@ -16,8 +16,8 @@ yarn-error.log*
 .vercel
 
 # Database
-prisma/dev.db
-prisma/dev.db-journal
+# prisma/dev.db
+# prisma/dev.db-journal
 
 # Logs
 *_log.txt

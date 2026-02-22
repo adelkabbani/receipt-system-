@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { LayoutDashboard, Package, FileText, Tag } from 'lucide-react';
+import { LayoutDashboard, Package, FileText, Tag, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 
@@ -11,6 +11,7 @@ const routes = [
     { label: 'Inventory', icon: Package, href: '/inventory', color: "text-violet-500" },
     { label: 'Offers', icon: Tag, href: '/offers', color: "text-orange-500" },
     { label: 'Receipts', icon: FileText, href: '/offers/new', color: "text-pink-700" },
+    { label: 'Settings', icon: Settings, href: '/settings', color: "text-gray-400" },
 ];
 
 export function Sidebar() {

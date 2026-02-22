@@ -1,5 +1,10 @@
 import prisma from "@/lib/prisma";
-import { CatalogViewer } from "@/components/CatalogViewer";
+import dynamic from "next/dynamic";
+
+const CatalogViewer = dynamic(() => import('@/components/CatalogViewer').then(mod => mod.CatalogViewer), {
+    ssr: false,
+    loading: () => <div className="h-[600px] flex items-center justify-center bg-muted/20 text-muted-foreground rounded-md">Loading Catalog Viewer...</div>
+});
 
 export default async function OffersPage() {
     const products = await prisma.product.findMany({

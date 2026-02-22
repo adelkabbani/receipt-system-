@@ -1,0 +1,1 @@
+{"id":1,"defaultVatRate":19,"defaultProfitMargin":0,"companyName":"Shikh Al Ard General Trading","logoPath":"/kinan logo .png","nextReceiptNumber":1,"updatedAt":"2026-02-21T22:50:33.658Z"}

@@ -1,0 +1,94 @@
+=== IMPORT PREVIEW v2 ===
+Total products: 324
+
+=== CATEGORIES ===
+  General: 92
+  Fiat 9.55535-S2, GM dexos2â¢: 43
+  Mack EO-N / MAN M 3275-1: 21
+  Â» Porsche 999.917.080.00/FFL-3,Â» P SA 9734.S2Â» Renault BOT 450/DC4: 5
+  Volkswagen G 052 180 A2 / BMW 83220136376 /: 6
+  MÃLLER ATF 9HP: 5
+  MÃLLER ATF HP8: 5
+  MÃLLER ATF DEXRON III: 5
+  MÃLLER ATF DEXRON IIIH: 5
+  MÃLLER ATF 6HP: 5
+  MÃLLER Power Steering Oil: 5
+  MÃLLER ATF 17: 5
+  MÃLLER ATF DCG: 5
+  MÃLLER ATF HP7+: 5
+  MÃLLER Gear GL-5 SAE 80W-90: 4
+  MÃLLER Gear GL-4 SAE 80W-90: 4
+  MÃLLER Gear SAE 85W-140: 4
+  MÃLLER Gear GL-5 SAE 75W-80: 4
+  MÃLLER Gear GL-5 SAE 75W-90: 4
+  MÃLLER Gear SAE 90: 4
+  MÃLLER Gear SAE 140: 88
+
+=== FIRST 30 PRODUCTS ===
+  1. [General] 210010200 | MÃLLER SAE 0W-8 | 200L | €542
+  2. [General] 210010060 | MÃLLER SAE 0W-8 | 60L | €165.6
+  3. [General] 210010005 | MÃLLER SAE 0W-8 | 5L | €14.3
+  4. [General] 210010004 | MÃLLER SAE 0W-8 | 4L | €11.64
+  5. [General] 210010001 | MÃLLER SAE 0W-8 | 1L | €3.12
+  6. [General] 210020200 | MÃLLER SP SAE 0W-16 | 200L | €426
+  7. [General] 210020060 | MÃLLER SP SAE 0W-16 | 60L | €131.4
+  8. [General] 210020005 | MÃLLER SP SAE 0W-16 | 5L | €11.7
+  9. [General] 210020004 | MÃLLER SP SAE 0W-16 | 4L | €9.56
+  10. [General] 210020001 | MÃLLER SP SAE 0W-16 | 1L | €2.61
+  11. [General] 210030200 | MÃLLER C5 SAE 0W-20 | 200L | €650
+  12. [General] 210030060 | MÃLLER C5 SAE 0W-20 | 60L | €198.6
+  13. [General] 210030005 | MÃLLER C5 SAE 0W-20 | 5L | €17.3
+  14. [General] 210030004 | MÃLLER C5 SAE 0W-20 | 4L | €14.04
+  15. [General] 210030001 | MÃLLER C5 SAE 0W-20 | 1L | €3.73
+  16. [General] 210040200 | MÃLLER C6 SAE 0W-20 | 200L | €698
+  17. [General] 210040060 | MÃLLER C6 SAE 0W-20 | 60L | €213
+  18. [General] 210040005 | MÃLLER C6 SAE 0W-20 | 5L | €18.5
+  19. [General] 210040004 | MÃLLER C6 SAE 0W-20 | 4L | €15
+  20. [General] 210040001 | MÃLLER C6 SAE 0W-20 | 1L | €3.97
+  21. [General] 210050200 | MÃLLER SP  SAE 0W-20 | 200L | €440
+  22. [General] 210050060 | MÃLLER SP  SAE 0W-20 | 60L | €135.6
+  23. [General] 210050020 | MÃLLER SP  SAE 0W-20 | 0L | €0
+  24. [General] 210050005 | MÃLLER SP  SAE 0W-20 | 5L | €12.05
+  25. [General] 210050004 | MÃLLER SP  SAE 0W-20 | 4L | €9.84
+  26. [General] 210050001 | MÃLLER SP  SAE 0W-20 | 1L | €2.68
+  27. [General] 210060200 | MÃLLER 509 SAE 0W-20 | 200L | €720
+  28. [General] 210060060 | MÃLLER 509 SAE 0W-20 | 60L | €219.6
+  29. [General] 210060005 | MÃLLER 509 SAE 0W-20 | 5L | €19.05
+  30. [General] 210060004 | MÃLLER 509 SAE 0W-20 | 4L | €15.44
+
+=== PRODUCT GROUPS (unique names) ===
+  Unique product names: 71
+  1. MÃLLER SAE 0W-8
+  2. MÃLLER SP SAE 0W-16
+  3. MÃLLER C5 SAE 0W-20
+  4. MÃLLER C6 SAE 0W-20
+  5. MÃLLER SP  SAE 0W-20
+  6. MÃLLER 509 SAE 0W-20
+  7. MÃLLER SP  SAE 0W-30
+  8. MÃLLER 507 SAE 0W-30
+  9. MÃLLER C5 SAE 5W-20
+  10. MÃLLER SP SAE 5W-20
+  11. MÃLLER SP SAE 5W-30
+  12. MÃLLER 507 SAE 5W-30
+  13. MÃLLER SAE 5W-30
+  14. MÃLLER C4 SAE 5W-30
+  15. MÃLLER SP 507 SAE 5W-30
+  16. MÃLLER G1 SAE 5W-40
+  17. MÃLLER LL01 SAE 5W-40
+  18. MÃLLER SN Plus SAE 5W-40
+  19. MÃLLER LL04  SAE 5W-40
+  20. MÃLLER SN  SAE 10W-40
+  21. MÃLLER SL 10W-40
+  22. MÃLLER SP 10W-40
+  23. MÃLLER SN SAE 15W-40
+  24. MÃLLER SN SAE 20W-50
+  25. MÃLLER SN 10W-30
+  26. MÃLLER Truck Ci-4 SAE 10W-40
+  27. MÃLLER Truck Ci-4 SAE 15W-40
+  28. MÃLLER Truck Ci-4 SAE 20W-50
+  29. MÃLLER Truck HD SAE 40
+  30. MÃLLER Truck HD SAE 50
+
+=== RESULT ===
+Inserted: 324
+Verified in DB: 324

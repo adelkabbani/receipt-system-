@@ -64,7 +64,7 @@ function CatalogDocument({ products, dateStr }: { products: any[]; dateStr: stri
                 <View style={styles.header} fixed>
                     <View style={styles.headerLeft}>
                         <Text style={styles.companyName}>{COMPANY_CONFIG.name}</Text>
-                        <Text style={styles.companySubtitle}>{COMPANY_CONFIG.tagline}</Text>
+                        <Text style={styles.companySubtitle}>{COMPANY_CONFIG.slogan}</Text>
                         <Text style={styles.companySubtitle}>{COMPANY_CONFIG.contact.email} · {COMPANY_CONFIG.contact.web}</Text>
                     </View>
                     <View style={styles.headerRight}>

@@ -55,7 +55,7 @@ const MyDocument = ({ data }: { data: any }) => (
                     )}
                     {/* Company Details */}
                     <Text style={{ fontSize: 13, fontWeight: 'bold', marginBottom: 2 }}>
-                        Shikh Al Ard General Trading
+                        {data.companyName || "Shikh Al Ard General Trading"}
                     </Text>
                     <Text style={{ fontSize: 11, marginBottom: 4, color: '#333' }}>
                         For import and export (Wholesale & Retail)

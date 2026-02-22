@@ -1,9 +1,46 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
+const fs = require('fs');
 
 let mainWindow;
 let nextApp;
+
+function setupDatabase() {
+    // 1. Get the safe, persistent user directory (%APPDATA% on Windows)
+    const userDataPath = app.getPath('userData');
+    const dbFileName = 'dev.db';
+    const writableDbPath = path.join(userDataPath, dbFileName);
+
+    // 2. Locate the bundled database inside the .exe
+    const bundledDbPath = app.isPackaged
+        ? path.join(process.resourcesPath, 'prisma', dbFileName)
+        : path.join(__dirname, 'prisma', dbFileName);
+
+    // 3. THE UPDATE SAFEGUARD: Check if the user already has data
+    if (!fs.existsSync(writableDbPath)) {
+        // NEW INSTALL: Copy our bundled 226 products to their machine
+        console.log("First install detected. Copying database...");
+
+        // Make sure the directory exists just in case
+        if (!fs.existsSync(userDataPath)) {
+            fs.mkdirSync(userDataPath, { recursive: true });
+        }
+
+        // Ensure the source database exists before copying
+        if (fs.existsSync(bundledDbPath)) {
+            fs.copyFileSync(bundledDbPath, writableDbPath);
+        } else {
+            console.error("Bundled database not found at:", bundledDbPath);
+        }
+    } else {
+        // UPDATE DETECTED: Do nothing! Leave their data exactly as it is.
+        console.log("Existing installation detected. Preserving user's database.");
+    }
+
+    // 4. Force Prisma to use this persistent database
+    process.env.DATABASE_URL = `file:${writableDbPath}`;
+}
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -25,6 +62,7 @@ function createWindow() {
 }
 
 app.on('ready', () => {
+    setupDatabase();
     // Start Next.js server
     const nextPath = path.join(__dirname, 'node_modules', '.bin', 'next');
 

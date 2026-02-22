@@ -30,6 +30,7 @@ model Settings {
   defaultProfitMargin Float    @default(0)
   companyName         String   @default("Shikh Al Ard General Trading")
   logoPath            String?  @default("/kinan logo .png")
+  nextReceiptNumber   Int      @default(1)
   updatedAt           DateTime @updatedAt
 }
 

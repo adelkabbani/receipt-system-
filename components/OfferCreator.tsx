@@ -20,7 +20,7 @@ import {
     CommandItem,
     CommandList,
 } from "@/components/ui/command"
-import { saveInvoice } from "@/app/inventory/actions";
+import { saveInvoice, getSettings } from "@/app/inventory/actions";
 
 // Dynamic import to avoid SSR issues with react-pdf binding
 const PDFPreview = dynamic(() => import("./PDFPreview"), {
@@ -30,6 +30,7 @@ const PDFPreview = dynamic(() => import("./PDFPreview"), {
 
 export function OfferCreator({ products }: { products: any[] }) {
     const [formData, setFormData] = useState({
+        companyName: "Shikh Al Ard General Trading", // Fallback
         offerNumber: "OFF-0001",
         billingName: "",    // New 'Bill To' name
         clientLocation: "",
@@ -51,9 +52,28 @@ export function OfferCreator({ products }: { products: any[] }) {
     const [debouncedData, setDebouncedData] = useState<any>(null);
 
     useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const settings = await getSettings();
+                setFormData(prev => ({
+                    ...prev,
+                    companyName: settings.companyName,
+                    vatRate: settings.defaultVatRate,
+                    profitMargin: settings.defaultProfitMargin,
+                    offerNumber: `OFF-${(settings.nextReceiptNumber || 1).toString().padStart(4, '0')}`
+                }));
+            } catch (error) {
+                console.error("Failed to fetch settings", error);
+            }
+        };
+        fetchSettings();
+    }, []);
+
+    useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedData({
                 ...formData,
+                companyName: formData.companyName,
                 totalNet: totals.net,
                 vat: totals.vat,
                 totalGross: totals.gross
@@ -95,6 +115,27 @@ export function OfferCreator({ products }: { products: any[] }) {
             return { ...prev, lineItems: updatedItems };
         });
     }, [formData.profitMargin]);
+
+    const handleSave = async () => {
+        try {
+            const result = await saveInvoice({ ...formData, ...totals });
+            if (result.success) {
+                alert(`Receipt Saved Successfully! \nNext ID: ${result.nextOfferNumber}`);
+                // Auto-increment the UI for the next receipt
+                setFormData(prev => ({
+                    ...prev,
+                    offerNumber: result.nextOfferNumber,
+                    lineItems: [], // Clear items for next use
+                    billingName: "",
+                    clientLocation: "",
+                    clientNumber: ""
+                }));
+            }
+        } catch (error) {
+            console.error("Save failed", error);
+            alert("Failed to save receipt. Check console for details.");
+        }
+    };
 
     const addLineItem = () => {
         setFormData(prev => ({
@@ -169,27 +210,6 @@ export function OfferCreator({ products }: { products: any[] }) {
         });
     };
 
-    const handleSave = async () => {
-        try {
-            const result = await saveInvoice({ ...formData, ...totals });
-            if (result.success) {
-                alert(`Receipt Saved Successfully! \nNext ID: ${result.nextOfferNumber}`);
-                // Auto-increment the UI for the next receipt
-                setFormData(prev => ({
-                    ...prev,
-                    offerNumber: result.nextOfferNumber,
-                    lineItems: [], // Clear items for next use
-                    billingName: "",
-                    clientLocation: "",
-                    clientNumber: ""
-                }));
-            }
-        } catch (error) {
-            console.error("Save failed", error);
-            alert("Failed to save receipt. Check console for details.");
-        }
-    };
-
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-120px)]">
             {/* Left: Form - Glassmorphism Style */}
@@ -253,18 +273,7 @@ export function OfferCreator({ products }: { products: any[] }) {
                             </div>
                         </div>
 
-                        <div className="flex items-center space-x-2 bg-secondary/50 px-3 py-1.5 rounded-full">
-                            <Label className="text-xs font-medium mr-2 whitespace-nowrap">Profit %:</Label>
-                            <Input
-                                type="number"
-                                value={formData.profitMargin}
-                                onChange={(e) => setFormData({ ...formData, profitMargin: Number(e.target.value) })}
-                                className="w-16 h-8 text-xs bg-white/50 dark:bg-black/20 p-1"
-                            />
-                        </div>
                     </div>
-
-
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label>Receipt Number</Label>
@@ -336,7 +345,14 @@ export function OfferCreator({ products }: { products: any[] }) {
                 {/* Products Card */}
                 <div className="space-y-4 rounded-xl p-6 gold-glass shadow-sm border-gold-500/20 flex flex-col max-h-[600px]">
                     <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-bold text-lg bg-gradient-to-r from-gold-600 to-gold-400 bg-clip-text text-transparent">Products</h3>
+                        <h3 className="font-bold text-lg flex items-center bg-gradient-to-r from-gold-600 to-gold-400 bg-clip-text text-transparent">
+                            Products
+                            {formData.profitMargin > 0 && (
+                                <span className="ml-3 inline-flex items-center rounded-sm bg-green-500/20 px-2 py-0.5 text-[10px] font-bold text-green-400 border border-green-500/30 uppercase tracking-wider">
+                                    Profit Applied: {formData.profitMargin}%
+                                </span>
+                            )}
+                        </h3>
                     </div>
 
                     {/* Scrollable items list */}
@@ -493,7 +509,17 @@ export function OfferCreator({ products }: { products: any[] }) {
                 </div>
 
                 {/* Totals Card */}
-                <div className="rounded-xl p-6 gold-glass shadow-sm border-gold-500/20">
+                <div className="rounded-xl p-6 gold-glass shadow-sm border-gold-500/20 space-y-3">
+                    {/* Global Profit Margin Input */}
+                    <div className="flex flex-col gap-2 p-3 bg-black/20 rounded-lg border border-gold-500/20 mb-2">
+                        <Label className="text-gold-500 font-semibold tracking-wide text-xs uppercase">Global Profit Margin (%)</Label>
+                        <Input
+                            type="number"
+                            value={formData.profitMargin}
+                            onChange={(e) => setFormData({ ...formData, profitMargin: Number(e.target.value) })}
+                            className="bg-white/5 border-gold-500/20 text-white font-mono"
+                        />
+                    </div>
                     <div className="flex justify-between text-base">
                         <span className="text-muted-foreground">Subtotal:</span>
                         <span className="font-mono">€{totals.net.toFixed(2)}</span>
