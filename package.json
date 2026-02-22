@@ -20,7 +20,7 @@
     "appId": "com.antigravity.receipt",
     "productName": "Receipt System",
     "asar": true,
-    "asarUnpacked": [
+    "asarUnpack": [
       "node_modules/.prisma",
       "node_modules/@prisma/client"
     ],
