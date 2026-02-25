@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { Document, Page, Text, View, StyleSheet, PDFViewer, Image } from "@react-pdf/renderer";
-import { COMPANY_CONFIG } from "@/lib/config";
+import { COMPANY_CONFIG, CONTACT_LOCATIONS } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 
 // ─── PDF Document ─────────────────────────────────────────────────────────────
 
-function CatalogDocument({ products, dateStr }: { products: any[]; dateStr: string }) {
+function CatalogDocument({ products, dateStr, location }: { products: any[]; dateStr: string; location: 'cairo' | 'damascus' }) {
     // Group by category
     const grouped = useMemo(() => {
         const map = new Map<string, any[]>();
@@ -69,7 +69,9 @@ function CatalogDocument({ products, dateStr }: { products: any[]; dateStr: stri
                 <View style={styles.header} fixed>
                     <View style={styles.headerLeft}>
                         <Text style={styles.companyName}>{COMPANY_CONFIG.name}</Text>
-                        <Text style={styles.companySubtitle}>{COMPANY_CONFIG.slogan}</Text>
+                        <Text style={styles.companySubtitle}>
+                            {(location === 'damascus' ? CONTACT_LOCATIONS.damascus : CONTACT_LOCATIONS.cairo).replace(' | ', '\n')}
+                        </Text>
                         <Text style={styles.companySubtitle}>{COMPANY_CONFIG.contact.email} · {COMPANY_CONFIG.contact.web}</Text>
                     </View>
                     <View style={styles.headerRight}>
@@ -142,6 +144,7 @@ export function CatalogViewer({ products, defaultMargin = 0 }: { products: any[]
     const [isClient, setIsClient] = useState(false);
     const [filter, setFilter] = useState<string>("all");
     const [profitMargin, setProfitMargin] = useState<number>(defaultMargin);
+    const [location, setLocation] = useState<'cairo' | 'damascus'>('cairo');
 
     useEffect(() => {
         setIsClient(true);
@@ -203,14 +206,34 @@ export function CatalogViewer({ products, defaultMargin = 0 }: { products: any[]
                     );
                 })}
 
-                <div className="ml-auto flex items-center space-x-2 bg-secondary/50 px-3 py-1.5 rounded-full border border-border/50">
-                    <Label className="text-xs font-medium mr-2 whitespace-nowrap">Global Profit Margin %:</Label>
-                    <Input
-                        type="number"
-                        value={profitMargin}
-                        onChange={(e) => setProfitMargin(Number(e.target.value))}
-                        className="w-16 h-7 text-xs bg-white text-black p-1"
-                    />
+                <div className="ml-auto flex flex-wrap items-center gap-3">
+                    <div className="flex items-center space-x-2 bg-secondary/50 px-3 py-1.5 rounded-full border border-border/50">
+                        <Label className="text-xs font-medium mr-2">Location:</Label>
+                        <div className="flex bg-muted rounded-lg p-0.5 whitespace-nowrap">
+                            <button
+                                onClick={() => setLocation('cairo')}
+                                className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${location === 'cairo' ? "bg-gold-500 text-black shadow-[0_0_10px_rgba(212,175,55,0.4)]" : "text-muted-foreground hover:text-foreground"}`}
+                            >
+                                Cairo
+                            </button>
+                            <button
+                                onClick={() => setLocation('damascus')}
+                                className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${location === 'damascus' ? "bg-gold-500 text-black shadow-[0_0_10px_rgba(212,175,55,0.4)]" : "text-muted-foreground hover:text-foreground"}`}
+                            >
+                                Damascus
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2 bg-secondary/50 px-3 py-1.5 rounded-full border border-border/50 whitespace-nowrap">
+                        <Label className="text-xs font-medium mr-2">Global Profit Margin %:</Label>
+                        <Input
+                            type="number"
+                            value={profitMargin}
+                            onChange={(e) => setProfitMargin(Number(e.target.value))}
+                            className="w-16 h-7 text-xs bg-white text-black p-1"
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -222,7 +245,7 @@ export function CatalogViewer({ products, defaultMargin = 0 }: { products: any[]
             ) : (
                 <div className="h-[calc(100vh-220px)] min-h-[600px] w-full bg-white rounded-md border shadow-sm">
                     <PDFViewer width="100%" height="100%" showToolbar={true}>
-                        <CatalogDocument products={filtered} dateStr={dateStr} />
+                        <CatalogDocument products={filtered} dateStr={dateStr} location={location} />
                     </PDFViewer>
                 </div>
             )}
