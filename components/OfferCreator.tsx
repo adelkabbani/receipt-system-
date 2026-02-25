@@ -50,6 +50,7 @@ export function OfferCreator({ products }: { products: any[] }) {
 
     // Performance: Debounced data for PDF preview
     const [debouncedData, setDebouncedData] = useState<any>(null);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -83,15 +84,19 @@ export function OfferCreator({ products }: { products: any[] }) {
                 }
             } catch (error) {
                 console.error("Failed to fetch settings", error);
+            } finally {
+                setIsLoaded(true);
             }
         };
         fetchSettings();
     }, []);
 
-    // Save draft to local storage on any change
+    // Save draft to local storage on any change, ONLY after initial load
     useEffect(() => {
-        localStorage.setItem('receipt_draft', JSON.stringify({ ...formData, lineItems: formData.lineItems }));
-    }, [formData]);
+        if (isLoaded) {
+            localStorage.setItem('receipt_draft', JSON.stringify({ ...formData, lineItems: formData.lineItems }));
+        }
+    }, [formData, isLoaded]);
 
     useEffect(() => {
         const handler = setTimeout(() => {
