@@ -268,19 +268,19 @@ export function InventoryTable({ products }: { products: Product[] }) {
                         ) : (
                             filteredProducts.map((product) => (
                                 <TableRow key={product.id} className="border-gold-500/5 hover:bg-gold-500/5 transition-colors group">
-                                    <TableCell className="text-[10px] font-black text-muted-foreground uppercase">{product.category || "-"}</TableCell>
-                                    <TableCell className="font-mono text-xs">{product.itemCode || "-"}</TableCell>
-                                    <TableCell className="font-bold text-foreground max-w-[200px] truncate">{product.name}</TableCell>
-                                    <TableCell className="text-xs text-muted-foreground">{product.hsCode || "-"}</TableCell>
-                                    <TableCell className="text-right font-medium">{product.amount || 0}{product.measureUnit || "L"}</TableCell>
-                                    <TableCell className="text-right font-black text-gold-500">€{product.packagePrice.toFixed(2)}</TableCell>
-                                    <TableCell className="text-right">
-                                        <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-gold-500 hover:bg-gold-500/20" onClick={() => setEditProduct(product)}>
-                                                <Pencil className="h-3.5 w-3.5" />
+                                    <TableCell className="p-4 text-xs font-black text-muted-foreground uppercase">{product.category || "-"}</TableCell>
+                                    <TableCell className="p-4 font-mono text-sm">{product.itemCode || "-"}</TableCell>
+                                    <TableCell className="p-4 font-bold text-foreground text-sm max-w-[200px] truncate">{product.name}</TableCell>
+                                    <TableCell className="p-4 text-sm text-muted-foreground">{product.hsCode || "-"}</TableCell>
+                                    <TableCell className="p-4 text-right font-medium text-sm">{product.amount || 0}{product.measureUnit || "L"}</TableCell>
+                                    <TableCell className="p-4 text-right font-black text-gold-500 text-sm">€{product.packagePrice.toFixed(2)}</TableCell>
+                                    <TableCell className="p-4 text-right">
+                                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <Button variant="ghost" size="icon" className="h-10 w-10 text-gold-500 hover:bg-gold-500/20" onClick={() => setEditProduct(product)}>
+                                                <Pencil className="h-4 w-4" />
                                             </Button>
-                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:bg-destructive/20" onClick={() => handleDelete(product.id)}>
-                                                <Trash2 className="h-3.5 w-3.5" />
+                                            <Button variant="ghost" size="icon" className="h-10 w-10 text-destructive hover:bg-destructive/20" onClick={() => handleDelete(product.id)}>
+                                                <Trash2 className="h-4 w-4" />
                                             </Button>
                                         </div>
                                     </TableCell>

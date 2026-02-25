@@ -55,19 +55,41 @@ export function OfferCreator({ products }: { products: any[] }) {
         const fetchSettings = async () => {
             try {
                 const settings = await getSettings();
-                setFormData(prev => ({
-                    ...prev,
-                    companyName: settings.companyName,
-                    vatRate: settings.defaultVatRate,
-                    profitMargin: settings.defaultProfitMargin,
-                    offerNumber: `OFF-${(settings.nextReceiptNumber || 1).toString().padStart(4, '0')}`
-                }));
+
+                const savedDraft = localStorage.getItem('offerDraft');
+                if (savedDraft) {
+                    try {
+                        const parsed = JSON.parse(savedDraft);
+                        if (parsed.date) parsed.date = new Date(parsed.date);
+                        setFormData(prev => ({
+                            ...prev,
+                            ...parsed,
+                            companyName: settings.companyName,
+                            offerNumber: `OFF-${(settings.nextReceiptNumber || 1).toString().padStart(4, '0')}`
+                        }));
+                    } catch (e) {
+                        console.error("Failed to parse draft", e);
+                    }
+                } else {
+                    setFormData(prev => ({
+                        ...prev,
+                        companyName: settings.companyName,
+                        vatRate: settings.defaultVatRate,
+                        profitMargin: settings.defaultProfitMargin,
+                        offerNumber: `OFF-${(settings.nextReceiptNumber || 1).toString().padStart(4, '0')}`
+                    }));
+                }
             } catch (error) {
                 console.error("Failed to fetch settings", error);
             }
         };
         fetchSettings();
     }, []);
+
+    // Save draft to local storage on any change
+    useEffect(() => {
+        localStorage.setItem('offerDraft', JSON.stringify({ ...formData, lineItems: formData.lineItems }));
+    }, [formData]);
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -121,6 +143,7 @@ export function OfferCreator({ products }: { products: any[] }) {
             const result = await saveInvoice({ ...formData, ...totals });
             if (result.success) {
                 alert(`Receipt Saved Successfully! \nNext ID: ${result.nextOfferNumber}`);
+                localStorage.removeItem('offerDraft');
                 // Auto-increment the UI for the next receipt
                 setFormData(prev => ({
                     ...prev,

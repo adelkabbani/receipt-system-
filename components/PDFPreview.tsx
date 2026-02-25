@@ -102,31 +102,33 @@ const MyDocument = ({ data }: { data: any }) => (
             </View>
 
             {/* Table Rows */}
-            {data.lineItems && data.lineItems.map((item: any, index: number) => (
-                <View key={index} style={styles.tableRow}>
-                    <View style={styles.colItem}>
-                        <Text style={styles.text}>{item.itemCode || "-"}</Text>
-                        {item.category && <Text style={styles.subText}>{item.category}</Text>}
+            <View wrap={true}>
+                {data.lineItems && data.lineItems.map((item: any, index: number) => (
+                    <View key={index} style={styles.tableRow} wrap={false}>
+                        <View style={styles.colItem}>
+                            <Text style={styles.text}>{item.itemCode || "-"}</Text>
+                            {item.category && <Text style={styles.subText}>{item.category}</Text>}
+                        </View>
+                        <View style={styles.colDesc}>
+                            <Text style={styles.text}>{item.name}</Text>
+                            {item.description && <Text style={styles.subText}>{item.description}</Text>}
+                        </View>
+                        <Text style={[styles.colQty, styles.text]}>{item.quantity}</Text>
+                        <Text style={[styles.colLiters, styles.text]}>{item.amount || 0}{item.measureUnit || "L"}</Text>
+                        <Text style={[styles.colPrice, styles.text]}>€{Number(item.packagePrice || item.pricePerLiter || 0).toFixed(2)}</Text>
+                        <Text style={[styles.colTotal, styles.text]}>
+                            {(() => {
+                                const pkgPrice = Number(item.packagePrice) || (Number(item.amount || 0) * Number(item.pricePerLiter || 0));
+                                const total = Number(item.quantity) * pkgPrice;
+                                return `€${total.toFixed(2)}`;
+                            })()}
+                        </Text>
                     </View>
-                    <View style={styles.colDesc}>
-                        <Text style={styles.text}>{item.name}</Text>
-                        {item.description && <Text style={styles.subText}>{item.description}</Text>}
-                    </View>
-                    <Text style={[styles.colQty, styles.text]}>{item.quantity}</Text>
-                    <Text style={[styles.colLiters, styles.text]}>{item.amount || 0}{item.measureUnit || "L"}</Text>
-                    <Text style={[styles.colPrice, styles.text]}>€{Number(item.packagePrice || item.pricePerLiter || 0).toFixed(2)}</Text>
-                    <Text style={[styles.colTotal, styles.text]}>
-                        {(() => {
-                            const pkgPrice = Number(item.packagePrice) || (Number(item.amount || 0) * Number(item.pricePerLiter || 0));
-                            const total = Number(item.quantity) * pkgPrice;
-                            return `€${total.toFixed(2)}`;
-                        })()}
-                    </Text>
-                </View>
-            ))}
+                ))}
+            </View>
 
             {/* Totals */}
-            <View style={styles.totalSection}>
+            <View style={styles.totalSection} wrap={false}>
                 <View style={{ flexDirection: 'column' }}>
                     <View style={styles.totalRow}>
                         <Text style={styles.totalLabel}>Subtotal:</Text>
@@ -146,13 +148,14 @@ const MyDocument = ({ data }: { data: any }) => (
             </View>
 
             {/* Footer */}
-            <View style={[styles.footer, { justifyContent: 'flex-end' }]} fixed>
+            <View style={[styles.footer, { justifyContent: 'flex-end' }]} fixed={true}>
                 <View style={{ alignItems: 'flex-end' }}>
-                    <Text style={{ fontSize: 10, color: '#999' }}>{COMPANY_CONFIG.contact.web}</Text>
-                    <Text style={{ fontSize: 10, color: '#999', marginBottom: 5 }}>{COMPANY_CONFIG.contact.email}</Text>
+                    <Text style={{ fontSize: 10, color: '#999' }} fixed={true}>{COMPANY_CONFIG.contact.web}</Text>
+                    <Text style={{ fontSize: 10, color: '#999', marginBottom: 5 }} fixed={true}>{COMPANY_CONFIG.contact.email}</Text>
                     <Text
                         style={{ fontSize: 9, color: '#333', fontWeight: 'bold' }}
                         render={({ pageNumber, totalPages }) => `Page ${pageNumber} of ${totalPages}`}
+                        fixed={true}
                     />
                 </View>
             </View>
