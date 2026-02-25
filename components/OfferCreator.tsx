@@ -56,11 +56,13 @@ export function OfferCreator({ products }: { products: any[] }) {
             try {
                 const settings = await getSettings();
 
-                const savedDraft = localStorage.getItem('offerDraft');
+                const savedDraft = localStorage.getItem('receipt_draft');
                 if (savedDraft) {
                     try {
                         const parsed = JSON.parse(savedDraft);
                         if (parsed.date) parsed.date = new Date(parsed.date);
+                        if (!parsed.location) parsed.location = 'cairo';
+                        if (!parsed.branch) parsed.branch = 'moller';
                         setFormData(prev => ({
                             ...prev,
                             ...parsed,
@@ -88,7 +90,7 @@ export function OfferCreator({ products }: { products: any[] }) {
 
     // Save draft to local storage on any change
     useEffect(() => {
-        localStorage.setItem('offerDraft', JSON.stringify({ ...formData, lineItems: formData.lineItems }));
+        localStorage.setItem('receipt_draft', JSON.stringify({ ...formData, lineItems: formData.lineItems }));
     }, [formData]);
 
     useEffect(() => {
@@ -143,7 +145,7 @@ export function OfferCreator({ products }: { products: any[] }) {
             const result = await saveInvoice({ ...formData, ...totals });
             if (result.success) {
                 alert(`Receipt Saved Successfully! \nNext ID: ${result.nextOfferNumber}`);
-                localStorage.removeItem('offerDraft');
+                localStorage.removeItem('receipt_draft');
                 // Auto-increment the UI for the next receipt
                 setFormData(prev => ({
                     ...prev,
@@ -381,9 +383,9 @@ export function OfferCreator({ products }: { products: any[] }) {
                     {/* Scrollable items list */}
                     <div className="space-y-4 overflow-y-auto pr-2 flex-1 custom-scrollbar">
                         {formData.lineItems.map((item, index) => (
-                            <div key={index} className="flex flex-col gap-3 p-4 border rounded-xl bg-white/10 dark:bg-black/40 hover:bg-gold-500/10 transition-colors border-gold-500/20 shadow-md">
-                                <div className="flex gap-2">
-                                    <div className="flex-1 space-y-1">
+                            <div key={index} className="flex flex-col gap-4 p-6 border rounded-xl bg-white/10 dark:bg-black/40 hover:bg-gold-500/10 transition-colors border-gold-500/20 shadow-md">
+                                <div className="flex gap-4">
+                                    <div className="flex-1 space-y-2">
                                         <Label className="text-xs font-semibold text-gold-500/70">Product Name</Label>
                                         <Popover open={openPopovers[index]} onOpenChange={(open) => setOpenPopovers(prev => ({ ...prev, [index]: open }))}>
                                             <PopoverTrigger asChild>
@@ -391,7 +393,7 @@ export function OfferCreator({ products }: { products: any[] }) {
                                                     variant="outline"
                                                     role="combobox"
                                                     className={cn(
-                                                        "w-full justify-between bg-black/20 dark:bg-black/40 border-gold-500/30 hover:border-gold-500 hover:bg-gold-500/10 text-white transition-all",
+                                                        "w-full h-auto py-3 justify-between bg-black/20 dark:bg-black/40 border-gold-500/30 hover:border-gold-500 hover:bg-gold-500/10 text-white transition-all text-lg",
                                                         !item.productName && "text-white/50"
                                                     )}
                                                 >
@@ -443,14 +445,14 @@ export function OfferCreator({ products }: { products: any[] }) {
                                             </PopoverContent>
                                         </Popover>
                                     </div>
-                                    <div className="flex-1 space-y-1">
+                                    <div className="flex-1 space-y-2">
                                         <Label className="text-xs font-semibold text-gold-500/70">Variant (Size)</Label>
                                         <Select
                                             value={item.productId}
                                             disabled={!item.productName}
                                             onValueChange={(val) => updateLineItem(index, "productId", val)}
                                         >
-                                            <SelectTrigger className="bg-black/20 dark:bg-black/40 border-gold-500/30 hover:border-gold-500 text-white transition-all">
+                                            <SelectTrigger className="bg-black/20 dark:bg-black/40 border-gold-500/30 hover:border-gold-500 text-white transition-all text-lg h-auto py-3">
                                                 <SelectValue placeholder={item.productName ? "Select Size..." : "Choose Name First"} />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -465,40 +467,40 @@ export function OfferCreator({ products }: { products: any[] }) {
                                             </SelectContent>
                                         </Select>
                                     </div>
-                                    <div className="pt-6">
-                                        <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10" onClick={() => removeLineItem(index)}>
-                                            <Trash2 className="h-4 w-4" />
+                                    <div className="pt-8">
+                                        <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10 h-12 w-12" onClick={() => removeLineItem(index)}>
+                                            <Trash2 className="h-6 w-6" />
                                         </Button>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-4 gap-2">
-                                    <div className="space-y-1">
-                                        <Label className="text-xs text-muted-foreground">Qty</Label>
+                                <div className="grid grid-cols-4 gap-4">
+                                    <div className="space-y-2">
+                                        <Label className="text-sm text-muted-foreground font-semibold">Qty</Label>
                                         <Input
                                             type="number"
                                             value={item.quantity}
                                             onChange={(e) => updateLineItem(index, "quantity", Number(e.target.value))}
-                                            className="bg-transparent"
+                                            className="bg-black/20 text-lg h-12"
                                         />
                                     </div>
-                                    <div className="space-y-1">
-                                        <Label className="text-xs text-muted-foreground">Package ({item.amount || 0}{item.measureUnit || "L"})</Label>
-                                        <div className="h-10 flex items-center px-3 rounded-md bg-muted/20 text-sm text-muted-foreground">
+                                    <div className="space-y-2">
+                                        <Label className="text-sm text-muted-foreground">Package</Label>
+                                        <div className="h-12 flex items-center px-4 rounded-md bg-muted/20 text-lg text-muted-foreground font-semibold">
                                             {item.amount || 0}{item.measureUnit || "L"}
                                         </div>
                                     </div>
-                                    <div className="space-y-1">
-                                        <Label className="text-xs text-muted-foreground">Pkg Price (€)</Label>
+                                    <div className="space-y-2">
+                                        <Label className="text-sm text-muted-foreground">Pkg Price (€)</Label>
                                         <Input
                                             type="number"
                                             disabled
                                             value={Number(item.packagePrice || item.pricePerLiter || 0).toFixed(2)}
-                                            className="bg-muted/20"
+                                            className="bg-muted/20 text-lg h-12"
                                         />
                                     </div>
-                                    <div className="space-y-1">
-                                        <Label className="text-xs font-bold text-sky-600 dark:text-sky-400">Total</Label>
-                                        <div className="h-10 flex items-center justify-end px-3 rounded-md bg-secondary/30 font-mono text-sm font-semibold">
+                                    <div className="space-y-2">
+                                        <Label className="text-sm font-bold text-sky-600 dark:text-sky-400">Total</Label>
+                                        <div className="h-12 flex items-center justify-end px-4 rounded-md bg-secondary/30 font-mono text-lg font-bold">
                                             {(() => {
                                                 const isWeight = item.measureUnit === "kg" || item.measureUnit === "g";
                                                 const total = isWeight

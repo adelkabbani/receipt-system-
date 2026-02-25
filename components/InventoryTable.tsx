@@ -267,14 +267,14 @@ export function InventoryTable({ products }: { products: Product[] }) {
                             </TableRow>
                         ) : (
                             filteredProducts.map((product) => (
-                                <TableRow key={product.id} className="border-gold-500/5 hover:bg-gold-500/5 transition-colors group">
-                                    <TableCell className="p-4 text-xs font-black text-muted-foreground uppercase">{product.category || "-"}</TableCell>
-                                    <TableCell className="p-4 font-mono text-sm">{product.itemCode || "-"}</TableCell>
-                                    <TableCell className="p-4 font-bold text-foreground text-sm max-w-[200px] truncate">{product.name}</TableCell>
-                                    <TableCell className="p-4 text-sm text-muted-foreground">{product.hsCode || "-"}</TableCell>
-                                    <TableCell className="p-4 text-right font-medium text-sm">{product.amount || 0}{product.measureUnit || "L"}</TableCell>
-                                    <TableCell className="p-4 text-right font-black text-gold-500 text-sm">€{product.packagePrice.toFixed(2)}</TableCell>
-                                    <TableCell className="p-4 text-right">
+                                <TableRow key={product.id} className="min-h-[80px] border-gold-500/5 hover:bg-gold-500/5 transition-colors group">
+                                    <TableCell className="p-6 text-xs font-black text-muted-foreground uppercase">{product.category || "-"}</TableCell>
+                                    <TableCell className="p-6 font-mono text-sm">{product.itemCode || "-"}</TableCell>
+                                    <TableCell className="p-6 font-bold text-foreground text-lg max-w-[250px] truncate">{product.name}</TableCell>
+                                    <TableCell className="p-6 text-sm text-muted-foreground">{product.hsCode || "-"}</TableCell>
+                                    <TableCell className="p-6 text-right font-medium text-sm">{product.amount || 0}{product.measureUnit || "L"}</TableCell>
+                                    <TableCell className="p-6 text-right font-black text-gold-500 text-sm">€{product.packagePrice.toFixed(2)}</TableCell>
+                                    <TableCell className="p-6 text-right">
                                         <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <Button variant="ghost" size="icon" className="h-10 w-10 text-gold-500 hover:bg-gold-500/20" onClick={() => setEditProduct(product)}>
                                                 <Pencil className="h-4 w-4" />
